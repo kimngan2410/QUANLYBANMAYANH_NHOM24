@@ -1,0 +1,347 @@
+﻿@font-face {
+    font-family: 'quicksand-regular';
+    src: url('../fonts/quicksand-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-bold';
+    src: url('../fonts/quicksand-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-semibold';
+    src: url('../fonts/quicksand-semibold.ttf') format('truetype');
+}
+
+body {
+    margin: 0;
+    font-family: quicksand-regular, sans-serif;
+}
+
+header {
+}
+
+/*----Top header------*/
+.top-header {
+    background-color: #EFEAD9;
+    color: #1E4752;
+    padding: 10px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 120px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+    .logo img {
+        height: 70px;
+        width: 70px;
+        border-radius: 50%; /* Tạo hình tròn */
+        object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+        margin-right: 10px;
+    }
+
+.name-store {
+    font-family: 'quicksand-bold', sans-serif;
+}
+
+    .name-store p {
+        font-family: 'quicksand-semibold', sans-serif;
+        margin-bottom: 0;
+        font-size: 14px;
+        color: #1E4752;
+    }
+
+    .name-store h2 {
+        margin-top: 5px;
+        color: #1E4752;
+        font-size: 22px;
+    }
+
+
+
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.search-box {
+    display: flex; /* Sắp xếp các phần tử trong hàng ngang */
+    align-items: center; /* Canh giữa theo chiều dọc */
+}
+
+    .search-box input {
+        border: none; /* Bỏ viền */
+        outline: none; /* Bỏ viền khi focus */
+        width: 450px; /* Kích thước cố định */
+        padding: 10px 20px; /* Khoảng cách bên trong */
+        border-top-left-radius: 10px; /* Bo góc trái */
+        border-bottom-left-radius: 10px;
+        margin: 0; /* Loại bỏ khoảng cách mặc định */
+        height: 40px;
+    }
+
+    .search-box button {
+        background-color: #fff; /* Màu nền */
+        border: none; /* Bỏ viền */
+        outline: none; /* Bỏ viền khi focus */
+        cursor: pointer; /* Con trỏ dạng tay khi hover */
+        border-top-right-radius: 10px; /* Bo góc phải */
+        border-bottom-right-radius: 10px;
+        height: 40px; /* Chiều cao tương đồng với input */
+        padding: 0 15px; /* Padding để chứa icon */
+        margin: 0; /* Loại bỏ khoảng cách mặc định */
+    }
+
+    .search-box i {
+        color: #1E4752;
+        padding: 0 20px;/* Màu biểu tượng */
+    }
+
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+    .user-actions a {
+        color: #fff;
+        margin-left: 15px;
+        text-decoration: none;
+    }
+
+.icon-user {
+    height: 30px;
+    width: 30px;
+    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+}
+
+.icon-cart {
+    height: 35px;
+    width: 35px;
+    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+}
+
+.icon-heart {
+    height: 25px;
+    width: 25px;
+    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+    margin-top: 5px;
+}
+
+/*----Nav header------*/
+.navbar-header {
+    display: flex;
+    justify-content: space-between; /* Để các phần tử có khoảng cách đều */
+    align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+    background-color: #1E4752; /* Màu nền của thanh điều hướng */
+    padding: 15px 100px; /* Khoảng cách bên trong */
+    color: white;
+    height: 70px;
+}
+
+
+.nav-link {
+    display: flex;
+    align-items: center;
+}
+
+    .nav-link a {
+        color: white;
+        text-decoration: none;
+        margin: 0 35px;
+        font-size: 16px;
+        position: relative; /* Cần thiết để định vị pseudo-element */
+    }
+
+        .nav-link a::after {
+            content: ''; /* Tạo một phần tử ảo */
+            position: absolute; /* Định vị pseudo-element */
+            bottom: 0; /* Đặt ở phía dưới của liên kết */
+            left: 0; /* Bắt đầu từ trái */
+            width: 0; /* Ban đầu gạch dưới có độ rộng bằng 0 */
+            height: 2px; /* Độ dày của gạch dưới */
+            background-color: #E4A400; /* Màu sắc của gạch dưới */
+            transition: width 0.3s ease-out; /* Hiệu ứng mở rộng */
+        }
+
+        .nav-link a:hover::after {
+            width: 100%; /* Mở rộng gạch dưới đầy đủ chiều dài của liên kết */
+            color: #E4A400;
+        }
+
+        .nav-link a:hover{
+            color: #E4A400;
+        }
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    display: flex; /* Sử dụng flexbox */
+    justify-content: space-between; /* Cách đều giữa các phần tử */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    font-family: 'quicksand-semibold', sans-serif;
+    background-color: #EFEAD9;
+    color: #1E4752;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+}
+
+    .dropbtn i {
+        margin: 0 15px; /* Khoảng cách giữa các icon */
+    }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    color: black;
+    padding: 10px;
+}
+
+    .dropdown-content h3 {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .dropdown-content a {
+        color: black;
+        text-decoration: none;
+        display: block;
+        padding: 5px 0;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1; /* Màu nền khi hover */
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block; /* Hiển thị danh sách khi hover */
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+}
+
+    .contact img {
+        height: 35px;
+        width: 35px;
+        object-fit: cover;
+    }
+
+.phone-label, .phone-number {
+    margin: 0 15px; /* Xóa bỏ margin mặc định */
+}
+
+.phone-label {
+    color: #7F775D;
+    font-size: 14px;
+}
+
+.phone-number {
+    font-weight: bold;
+    color: #EFEAD9;
+}
+
+/*-----Footer------*/
+.footer {
+    background-color: #EFEAD9;
+    padding: 50px 100px;
+    color: #1E4752;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    width: 23%;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .footer-logo img {
+        width: 50px;
+        height: 50px;
+    }
+
+.footer-section h4 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    border-bottom: 2px solid #1E4752;
+    padding-bottom: 8px;
+}
+
+.footer-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+    .footer-section ul li {
+        margin: 10px 0;
+    }
+
+        .footer-section ul li a {
+            text-decoration: none;
+            color: #1E4752;
+            transition: color 0.3s;
+        }
+
+            .footer-section ul li a:hover {
+                color: #78909C;
+            }
+
+.footer-social {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+    .footer-social a {
+        color: #1E4752;
+        font-size: 20px;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .footer-social a:hover {
+            color: #78909C;
+        }
+
+.footer-section ul li i {
+    margin-right: 10px;
+}
