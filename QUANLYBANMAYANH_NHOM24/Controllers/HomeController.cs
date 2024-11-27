@@ -8,6 +8,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
