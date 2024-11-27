@@ -273,75 +273,141 @@ nav a {
 
 /*-----Footer------*/
 .footer {
-    background-color: #EFEAD9;
-    padding: 50px 100px;
-    color: #1E4752;
+    background-color: #EFEAD9; /* Change to match the desired footer */
+    padding: 30px 100px; /* Adjust padding for a more compact look */
+    color: #1E4752; /* Keep text color */
+    position: absolute; /* Adjust position if necessary */
+    width: 100%;
+    bottom: 0;
 }
 
 .footer-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Adjust to space evenly */
     flex-wrap: wrap;
 }
 
 .footer-section {
-    width: 23%;
+    width: 25%;
 }
 
 .footer-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
-    .footer-logo img {
-        width: 50px;
-        height: 50px;
-    }
+.footer-logo img{
+    width: 90px;
+    height: 90px;
+}
 
-.footer-section h4 {
+.footer-name-store {
+    margin-left: 20px;
+}
+
+.footer-name-store p {
+    font-family: 'quicksand-semibold', sans-serif;
+    font-size: 20px; /* Adjust size */
+    margin-bottom: 0;
+}
+
+.footer-name-store h2 {
+    font-family: 'quicksand-bold', sans-serif;
+    font-size: 32px; /* Adjust size */
+}
+
+.footer-list, .footer-help, .footer-contact {
     margin-bottom: 15px;
-    font-size: 18px;
-    border-bottom: 2px solid #1E4752;
-    padding-bottom: 8px;
+    font-family: 'quicksand-bold', sans-serif;
+    border-bottom: 3px solid #1E4752;
+    color: #1E4752;
+    font-size: 18px; /* Adjust size */
+    margin-left: 130px;
+    line-height: 35px;
+}
+
+.footer-list{
+    width: 28%;
+    
+}
+
+.footer-contact {
+    width: 23%;
+}
+
+.footer-help {
+    width: 20%;
 }
 
 .footer-section ul {
     list-style-type: none;
     padding: 0;
+    margin-left: 130px;
 }
 
     .footer-section ul li {
-        margin: 10px 0;
+        margin: 8px 0; /* Adjust spacing */
+        font-size: 14px;
+        position: relative; /* Cần phải có vị trí relative để định vị phần tử giả */
     }
 
         .footer-section ul li a {
-            text-decoration: none;
             color: #1E4752;
-            transition: color 0.3s;
+            text-decoration: none;
+            transition: color 0.3s; /* Hiệu ứng chuyển màu chữ */
+            position: relative; /* Cần phải có vị trí relative để định vị phần tử giả */
         }
 
-            .footer-section ul li a:hover {
-                color: #78909C;
+            .footer-section ul li a::after {
+                content: ''; /* Tạo một phần tử ảo */
+                position: absolute; /* Định vị pseudo-element */
+                bottom: 0; /* Đặt ở phía dưới của liên kết */
+                left: 0; /* Bắt đầu từ trái */
+                width: 0; /* Ban đầu gạch dưới có độ rộng bằng 0 */
+                height: 1px; /* Độ dày của gạch dưới */
+                background-color: #E4A400; /* Màu sắc của gạch dưới */
+                transition: width 0.3s ease-out; /* Hiệu ứng mở rộng */
             }
+
+            .footer-section ul li a:hover::after {
+                width: 100%; /* Khi hover, chiều rộng của đường gạch dưới sẽ mở rộng 100% */
+            }
+
+            .footer-section ul li a:hover {
+                color: #E4A400; /* Thay đổi màu chữ khi hover */
+            }
+
 
 .footer-social {
     display: flex;
-    gap: 15px;
-    margin-top: 15px;
+    gap: 25px;
+    margin-top: 25px;
+    margin-left: 110px;
 }
 
     .footer-social a {
-        color: #1E4752;
-        font-size: 20px;
-        text-decoration: none;
-        transition: color 0.3s;
+        font-size: 14px;
+        text-decoration: none; /* Bỏ gạch chân */
     }
 
-        .footer-social a:hover {
-            color: #78909C;
+    .footer-social i {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px; /* Đường kính của vòng tròn */
+        height: 40px; /* Đường kính của vòng tròn */
+        border: 2px solid #1E4752; /* Màu viền */
+        border-radius: 50%; /* Tạo hình tròn */
+        background-color: #1E4752; /* Màu nền */
+        color: white; /* Màu icon */
+    }
+
+        .footer-social i:hover {
+            border: 2px solid #E4A400; /* Màu viền */
+            background-color: #E4A400; /* Màu nền */
         }
 
-.footer-section ul li i {
-    margin-right: 10px;
+.txtAbout {
+    margin-left: 110px;
+    text-align: justify-all;
 }
