@@ -1,0 +1,24 @@
+﻿@model IEnumerable<QUANLYBANMAYANH_NHOM24.Models.DanhMuc>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách danh mục</title>
+</head>
+<body>
+    <h1>Danh sách danh mục</h1>
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Tên danh mục</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Iddanhmuc</td>
+                <td>@item.Tendanhmuc</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
