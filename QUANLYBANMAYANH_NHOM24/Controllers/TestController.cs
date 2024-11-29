@@ -3,7 +3,7 @@ using QUANLYBANMAYANH_NHOM24.Models;
 
 namespace QUANLYBANMAYANH_NHOM24.Controllers
 {
-    public class TestController: Controller
+    public class TestController : Controller
     {
         private readonly QuanLyBanMayAnhContext _context;
 
