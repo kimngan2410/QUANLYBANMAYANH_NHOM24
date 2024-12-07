@@ -14,18 +14,23 @@
 }
 
 body {
-    margin: 0;
+    display: flex;
+    flex-direction: column;
+    margin: 0; /* Loại bỏ margin mặc định */
     font-family: quicksand-regular, sans-serif;
 }
 
 header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 /*----Top header------*/
 .top-header {
     background-color: #EFEAD9;
     color: #1E4752;
-    padding: 10px 100px;
+    padding: 10px 110px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -83,7 +88,9 @@ nav a {
 
 .search-box {
     display: flex; /* Sắp xếp các phần tử trong hàng ngang */
-    align-items: center; /* Canh giữa theo chiều dọc */
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px; /* Canh giữa theo chiều dọc */
 }
 
     .search-box input {
@@ -151,7 +158,7 @@ nav a {
     justify-content: space-between; /* Để các phần tử có khoảng cách đều */
     align-items: center; /* Căn giữa các phần tử theo chiều dọc */
     background-color: #1E4752; /* Màu nền của thanh điều hướng */
-    padding: 15px 100px; /* Khoảng cách bên trong */
+    padding: 15px 110px; /* Khoảng cách bên trong */
     color: white;
     height: 70px;
 }
@@ -190,7 +197,6 @@ nav a {
             color: #E4A400;
         }
 
-
 .dropdown {
     position: relative;
     display: inline-block;
@@ -205,8 +211,9 @@ nav a {
     color: #1E4752;
     padding: 10px 15px;
     font-size: 16px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
     border: none;
-    border-radius: 10px;
     cursor: pointer;
     width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
 }
@@ -217,13 +224,15 @@ nav a {
 
 .dropdown-content {
     display: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     position: absolute;
     background-color: white;
-    min-width: 200px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     z-index: 1;
+    padding: 10px 20px;
     color: black;
-    padding: 10px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
     .dropdown-content h3 {
@@ -236,20 +245,73 @@ nav a {
         text-decoration: none;
         display: block;
         padding: 5px 0;
+        font-size: 14px;
     }
 
         .dropdown-content a:hover {
-            background-color: #f1f1f1; /* Màu nền khi hover */
+            color: #E4A400;
+            font-family: quicksand-bold, sans-serif;
         }
 
+
 .dropdown:hover .dropdown-content {
-    display: block; /* Hiển thị danh sách khi hover */
+    display: block;
 }
+
+.title_menu {
+    margin-top: 10px;
+    border-bottom: 3px solid #1E4752;
+}
+
+.title_menu span {
+    font-size: 16px;
+    font-family: quicksand-bold, sans-serif;
+    color: #1E4752;
+}
+    .title_menu span:hover {
+        color: #E4A400;
+    }
+
+
+.nav-item ul{
+    margin-top: 15px;
+}
+
+
+
+.category {
+    text-align: center;
+    max-width: 180px;
+}
+
+    .category img {
+        width: 100px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .category ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .category li {
+        font-size: 14px;
+        color: #555;
+        margin: 5px 0;
+    }
+
+        .category li:hover {
+            color: #007bff;
+            cursor: pointer;
+        }
 
 .contact {
     display: flex;
     align-items: center;
 }
+
 
     .contact img {
         height: 35px;
@@ -271,12 +333,23 @@ nav a {
     color: #EFEAD9;
 }
 
+/*-----Section------*/
+.container {
+    margin: 0 auto;
+    padding: 15px 110px;
+    width: 100%;
+    height: 100%;
+    max-width: 2500px;
+}
+
+
+
 /*-----Footer------*/
 .footer {
-    background-color: #EFEAD9; /* Change to match the desired footer */
-    padding: 30px 100px; /* Adjust padding for a more compact look */
-    color: #1E4752; /* Keep text color */
-    position: absolute; /* Adjust position if necessary */
+    background-color: #EFEAD9;
+    padding: 40px 110px;
+    color: #1E4752;
+    position: relative;
     width: 100%;
     bottom: 0;
 }
@@ -334,6 +407,7 @@ nav a {
 .footer-contact {
     width: 23%;
 }
+
 
 .footer-help {
     width: 20%;

@@ -1,0 +1,141 @@
+﻿@font-face {
+    font-family: 'quicksand-regular';
+    src: url('../fonts/quicksand-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-bold';
+    src: url('../fonts/quicksand-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-semibold';
+    src: url('../fonts/quicksand-semibold.ttf') format('truetype');
+}
+
+/*------- Thanh điều hướng ---------*/
+.breadcrumb {
+    font-family: 'quicksand-semibold', sans-serif;
+    font-size: 14px;
+    background-color: white; /* Màu nền sáng */
+    padding: 5px;
+    border: 2px solid #1E4752;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.home, .order {
+    text-decoration: none;
+    padding: 0 10px; /* Padding để tạo khoảng cách giữa các liên kết */
+    line-height: 1.5; /* Căn chỉnh chiều cao của liên kết */
+}
+
+.home {
+    color: #000000;
+}
+
+.order {
+    color: #E4A400;
+}
+
+.breadcrumb a:hover {
+    color: #E4A400; /* Màu khi di chuột vào */
+}
+
+.dot {
+    color: #5c5c5c;
+    padding: 0 5px; /* Khoảng cách giữa dấu chấm và các liên kết */
+    line-height: 1.5;
+    font-size: 20px; /* Căn chỉnh chiều cao cho dấu chấm */
+}
+
+
+
+
+/*--------------- Đặt hàng thành công ------------------*/
+.order-success {
+    max-width: 2500px; /* Chiều rộng tối đa */
+    width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    margin: 10px auto; /* Căn giữa */
+    text-align: center;
+    padding: 50px;
+    border: 2px solid #E4E4E4;
+    border-radius: 18px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.success-icon {
+    font-size: 50px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.success-icon img {
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+}
+
+h1 {
+    color: #4CAF50;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-family: 'quicksand-bold', sans-serif;
+}
+
+.details {
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    margin-top: 40px;
+
+}
+
+    .details p {
+        margin: 5px 0;
+        font-size: 18px;
+        font-family: 'quicksand-bold', sans-serif;
+    }
+
+    .details span {
+        font-size: 14px;
+        color: #8A8A8A;
+    }
+
+.code-order, .date-order, .total-order, .methoth-order {
+    padding: 0 50px;
+}
+
+.code-order, .date-order, .total-order {
+    border-right: 1px solid #8A8A8A;
+}
+
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.button, .button-secondary {
+    margin-right: 20px;
+    margin-left: 20px;
+    background-color: #1E4752;
+    border-radius: 25px;
+    padding: 10px 25px;
+    text-decoration: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    .button:hover, .button-secondary:hover {
+        background-color: #E4A400;
+    }

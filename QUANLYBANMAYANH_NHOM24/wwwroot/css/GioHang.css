@@ -1,0 +1,134 @@
+﻿@font-face {
+    font-family: 'quicksand-regular';
+    src: url('../fonts/quicksand-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-bold';
+    src: url('../fonts/quicksand-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-semibold';
+    src: url('../fonts/quicksand-semibold.ttf') format('truetype');
+}
+
+.customer-cart {
+    font-family: 'quicksand-regular', sans-serif;
+}
+
+/*------- Thanh điều hướng ---------*/
+.breadcrumb {
+    font-family: 'quicksand-semibold', sans-serif;
+    font-size: 14px;
+    background-color: white; /* Màu nền sáng */
+    padding: 5px;
+    border: 2px solid #1E4752;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+    .home, .cart {
+        text-decoration: none;
+        padding: 0 10px; /* Padding để tạo khoảng cách giữa các liên kết */
+        line-height: 1.5; /* Căn chỉnh chiều cao của liên kết */
+    }
+
+    .home{
+        color: #000000;
+    }
+
+    .cart {
+        color: #E4A400;
+    }
+        .breadcrumb a:hover {
+            color: #E4A400; /* Màu khi di chuột vào */
+        }
+
+.dot {
+    color: #5c5c5c;
+    padding: 0 5px; /* Khoảng cách giữa dấu chấm và các liên kết */
+    line-height: 1.5;
+    font-size: 20px;/* Căn chỉnh chiều cao cho dấu chấm */
+}
+
+
+/*-------- Giỏ hàng ----------*/
+.cart-container {
+    max-width: 1500px;
+    margin-top: 20px;
+    text-align: center;
+    padding: 40px;
+    border: 2px solid #E4E4E4;
+    border-radius: 18px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+   
+.product-quantity-cart{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .product-quantity-cart p {
+        font-family: 'quicksand-semibold', sans-serif;
+        font-size: 16px;
+    }
+
+    .product-quantity-cart h1 {
+        font-family: 'quicksand-bold', sans-serif;
+        color: #E4A400;
+        font-size: 32px;
+    }
+
+.empty-cart {
+    margin-top: 20px;
+}
+
+    .empty-cart img {
+        width: 250px;
+        height: 250px;/* Điều chỉnh kích thước hình ảnh */
+    }
+
+    .empty-cart p {
+        font-family: quicksand-semibold, sans-serif;
+        font-size: 18px;
+        color: #6e6c6c
+    }
+
+   
+
+.product-count {
+    color: #5c5c5c;
+    display: flex;
+    /* Màu chữ cho số sản phẩm */
+}
+
+.product-count p{
+    margin-left: 5px;
+}
+
+
+/*--------- Button Quay về trang chủ ------------*/
+.back-button {
+    background-color: #1E4752;
+    color: white;
+    font-family: 'quicksand-semibold', sans-serif; 
+    font-size: 16px; 
+    border: none; 
+    border-radius: 20px; /* Bo tròn các góc */
+    padding: 15px 30px; /* Khoảng cách trong nút */
+    cursor: pointer; /* Con trỏ khi di chuột */
+    transition: background-color 0.3s; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+    .back-button:hover {
+        background-color: #E4A400; /* Màu nền khi di chuột vào nút */
+    }
