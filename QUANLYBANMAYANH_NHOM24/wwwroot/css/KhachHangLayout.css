@@ -21,6 +21,9 @@ body {
 }
 
 header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 /*----Top header------*/
@@ -115,7 +118,7 @@ nav a {
 
     .search-box i {
         color: #1E4752;
-        padding: 0 20px;/* Màu biểu tượng */
+        padding: 0 20px; /* Màu biểu tượng */
     }
 
 
@@ -190,7 +193,7 @@ nav a {
             color: #E4A400;
         }
 
-        .nav-link a:hover{
+        .nav-link a:hover {
             color: #E4A400;
         }
 
@@ -260,17 +263,18 @@ nav a {
     border-bottom: 3px solid #1E4752;
 }
 
-.title_menu span {
-    font-size: 16px;
-    font-family: quicksand-bold, sans-serif;
-    color: #1E4752;
-}
-    .title_menu span:hover {
-        color: #E4A400;
+    .title_menu span {
+        font-size: 16px;
+        font-family: quicksand-bold, sans-serif;
+        color: #1E4752;
     }
 
+        .title_menu span:hover {
+            color: #E4A400;
+        }
 
-.nav-item ul{
+
+.nav-item ul {
     margin-top: 15px;
 }
 
@@ -339,17 +343,16 @@ nav a {
     max-width: 2500px;
 }
 
+
+
 /*-----Footer------*/
 .footer {
-    background-color: #EFEAD9; /* Change to match the desired footer */
-    padding: 30px 100px; /* Adjust padding for a more compact look */
-    color: #1E4752; /* Keep text color */
-    position: absolute; /* Adjust position if necessary */
-    width: 100%;
+    background-color: #EFEAD9;
+    padding: 40px 110px;
     color: #1E4752;
-    border-top: 1px solid #ddd;
-    position: relative; /* Đảm bảo không bị chèn */
-    z-index: 1; /* Đảm bảo không bị carousel đè */
+    position: relative;
+    width: 100%;
+    bottom: 0;
 }
 
 .footer-container {
@@ -367,25 +370,25 @@ nav a {
     align-items: center;
 }
 
-.footer-logo img{
-    width: 90px;
-    height: 90px;
-}
+    .footer-logo img {
+        width: 90px;
+        height: 90px;
+    }
 
 .footer-name-store {
     margin-left: 20px;
 }
 
-.footer-name-store p {
-    font-family: 'quicksand-semibold', sans-serif;
-    font-size: 20px; /* Adjust size */
-    margin-bottom: 0;
-}
+    .footer-name-store p {
+        font-family: 'quicksand-semibold', sans-serif;
+        font-size: 20px; /* Adjust size */
+        margin-bottom: 0;
+    }
 
-.footer-name-store h2 {
-    font-family: 'quicksand-bold', sans-serif;
-    font-size: 32px; /* Adjust size */
-}
+    .footer-name-store h2 {
+        font-family: 'quicksand-bold', sans-serif;
+        font-size: 32px; /* Adjust size */
+    }
 
 .footer-list, .footer-help, .footer-contact {
     margin-bottom: 15px;
@@ -397,9 +400,8 @@ nav a {
     line-height: 35px;
 }
 
-.footer-list{
+.footer-list {
     width: 28%;
-    
 }
 
 .footer-contact {
