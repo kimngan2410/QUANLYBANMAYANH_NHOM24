@@ -13,12 +13,153 @@
     src: url('../fonts/quicksand-semibold.ttf') format('truetype');
 }
 
-body {
+html, body {
+    height: 100%; /* Đảm bảo chiều cao 100% cho toàn bộ trang */
     margin: 0;
-    font-family: quicksand-regular, sans-serif;
+    display: flex;
+    flex-direction: column; /* Sắp xếp các phần tử theo cột */
 }
 
-header {
+/* Main sẽ chiếm không gian còn lại để đẩy footer xuống cuối */
+main {
+    flex: 1; /* Đẩy footer xuống cuối */
+    width: 100vw !important; /* Đảm bảo chiếm toàn bộ chiều rộng viewport */
+    max-width: 100%; /* Loại bỏ giới hạn chiều rộng */
+    margin: 0 !important; /* Loại bỏ margin hoàn toàn */
+    padding: 0 !important; /* Loại bỏ padding */
+    box-sizing: border-box; /* Bao gồm cả padding và border vào kích thước */
+}
+.container, .container-fluid {
+    margin: 5px 0px !important;
+    padding: 0 !important;
+    width: 100% !important; /* Đảm bảo chiều rộng full màn hình */
+    max-width: 100% !important;
+}
+.carousel-inner {
+    flex-grow: 1; /* Để nội dung carousel giãn hết cột */
+    height: auto;
+}
+
+    .carousel-inner img {
+        flex-grow: 1; /* Ảnh giãn ra để đồng bộ chiều cao */
+        object-fit: cover; /* Đảm bảo ảnh lấp đầy cột */
+        height: 100%; /* Chiều cao ảnh bằng chiều cao cha */
+    }
+
+ /*Căn chỉnh cột và tỷ lệ chính xác */
+.row {
+    display: flex;
+    align-items: stretch; /* Đảm bảo các cột có chiều cao bằng nhau */
+}
+
+.row.align-items-center {
+    margin: 0px !important
+}
+
+.col-lg-8,
+.col-lg-4 {
+    height: 100%; /* Cột tự kéo dài theo cha */
+    display: flex; /* Dùng Flexbox nếu nội dung cần căn chỉnh */
+    flex-direction: column; /* Nội dung trong cột xếp theo chiều dọc */
+}
+
+img {
+    border-radius: 10px; /* Bo góc cho ảnh */
+    height:100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+}
+
+.col-lg-4 img {
+    object-fit: cover;
+    height: 100%; /* Đồng bộ chiều cao với cột bên cạnh */
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%; /* Đặt chiều cao 100% cho các phần tử */
+}
+
+/*row mt-6*/
+.row.mt-6 {
+    margin: 12px 0px !important;
+}
+/*card*/
+.product-card {
+    height: 286px; /* Chiều cao cố định */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 200px; /* Giảm chiều rộng thẻ card */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto !important; /* Căn giữa card */
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    width: auto; /* Đảm bảo ảnh giữ nguyên tỉ lệ */
+    height: 120px; /* Chiều cao cố định */
+    max-width: 100%; /* Đảm bảo không vượt quá khung card */
+    object-fit: contain; /* Đảm bảo toàn bộ ảnh hiển thị bên trong khung */
+    display: block;
+    margin: 0 auto; /* Căn giữa ảnh */
+}
+
+.card-body {
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #E53935;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #D32F2F;
+}
+
+
+/*h3*/
+h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+/*nav*/
+.nav-pills .nav-link {
+    border: 1px solid #ccc; /* Viền bao quanh */
+    border-radius: 10px; /* Bo góc */
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    padding: 8px 15px; /* Khoảng cách bên trong */
+    margin-right: 10px; /* Khoảng cách giữa các mục */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển đổi */
+    text-align: center; /* Căn giữa nội dung */
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #e0e0e0; /* Màu nền khi hover */
+    border-color: #bbb; /* Đổi màu viền khi hover */
+}
+
+.nav-pills .nav-link.active {
+    background-color: #d9534f; /* Màu nền khi được chọn */
+    color: #fff; /* Màu chữ khi được chọn */
+    border-color: #d43f3a; /* Màu viền khi được chọn */
 }
 
 /*----Top header------*/
@@ -271,14 +412,16 @@ nav a {
     color: #EFEAD9;
 }
 
-/*-----Footer------*/
+/* Footer nằm ở cuối trang */
 .footer {
-    background-color: #EFEAD9; /* Change to match the desired footer */
-    padding: 30px 100px; /* Adjust padding for a more compact look */
-    color: #1E4752; /* Keep text color */
-    position: absolute; /* Adjust position if necessary */
+    background-color: #EFEAD9;
+    padding: 30px 100px;
+    text-align: center;
     width: 100%;
-    bottom: 0;
+    color: #1E4752;
+    border-top: 1px solid #ddd;
+    position: relative; /* Đảm bảo không bị chèn */
+    z-index: 1; /* Đảm bảo không bị carousel đè */
 }
 
 .footer-container {
