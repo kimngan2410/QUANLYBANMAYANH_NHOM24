@@ -81,6 +81,7 @@ public partial class QuanLyBanMayAnhContext : DbContext
             entity.Property(e => e.Tendanhmuc)
                 .HasMaxLength(100)
                 .HasColumnName("tendanhmuc");
+
         });
 
         modelBuilder.Entity<DanhMucCon>(entity =>

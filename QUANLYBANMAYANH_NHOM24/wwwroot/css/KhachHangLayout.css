@@ -259,14 +259,27 @@ nav a {
 }
 
 .title_menu {
+    position: relative;
+    display: inline-block; /* Để pseudo-element căn chỉnh đúng */
+    color: #1E4752;
     margin-top: 10px;
-    border-bottom: 3px solid #1E4752;
 }
+    .title_menu::after {
+        content: '';
+        display: block;
+        width: 70px; /* Chiều dài đường gạch dưới */
+        height: 3px; /* Độ dày đường gạch dưới */
+        background-color: #E4A400; /* Màu sắc đường gạch dưới */
+        position: absolute;
+        left: 0; /* Căn chỉnh sang bên trái */
+        bottom: -5px; /* Khoảng cách từ tiêu đề tới đường gạch dưới */
+    }
 
     .title_menu span {
-        font-size: 16px;
+        font-size: 20px;
         font-family: quicksand-bold, sans-serif;
         color: #1E4752;
+        font-weight: bold;
     }
 
         .title_menu span:hover {

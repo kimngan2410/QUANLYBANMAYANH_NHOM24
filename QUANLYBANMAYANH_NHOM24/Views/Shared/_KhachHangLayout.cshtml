@@ -49,55 +49,7 @@
                         <div class="bg-header-nav">
                             <div class="rows row-noGutter-2">
                                 <nav class="header-nav">
-                                    <ul class="item_big" style="padding: 20px;">
-                                        <!-- Item 1 -->
-                                        <li class="nav-item" style="width: 230px;">
-                                            <img src="./../images/danhmuc_mayanh.jpg" alt="Máy ảnh" style="width: 100px; height: 100px; object-fit: contain;">
-                                            <a class="title_menu" href="#" title="Máy chụp ảnh" style="width: 35%;">
-                                                <span>MÁY ẢNH</span>
-                                            </a>
-                                            <ul class="item_small d-flex flex-column">
-                                                <li><a href="#">Máy ảnh DSLR</a></li>
-                                                <li><a href="#">Máy ảnh Mirrorless</a></li>
-                                                <li><a href="#">Máy ảnh Compact</a></li>
-                                                <li><a href="#">Máy ảnh Medium Format</a></li>
-                                                <li><a href="#">Máy ảnh Instant</a></li>
-                                                <li><a href="#">Máy ảnh Film</a></li>
-                                            </ul>
-                                        </li>
-
-                                        <!-- Item 2 -->
-                                        <li class="nav-item" style="width: 200px;">
-                                            <img src="./../images/danhmuc_ongkinh.jpg" alt="Ống kính" style="width: 100px; height: 100px; object-fit: cover;">
-                                            <a class="title_menu" href="#" title="Ống kính" style="width: 75%;">
-                                                <span>ỐNG KÍNH (Lens)</span>
-                                            </a>
-                                            <ul class="item_small d-flex flex-column">
-                                                <li><a href="#">Ống kính Prime</a></li>
-                                                <li><a href="#">Ống kính Zoom</a></li>
-                                                <li><a href="#">Ống kính Macro</a></li>
-                                                <li><a href="#">Ống kính Góc rộng</a></li>
-                                                <li><a href="#">Ống kính Telephoto</a></li>
-                                            </ul>
-                                        </li>
-
-                                        <!-- Item 3 -->
-                                        <li class="nav-item" style="width: 200px;">
-                                            <img src="./../images/danhmuc_phukien.jpg" alt="Phụ kiện máy ảnh" style="width: 100px; height: 100px; object-fit: cover;">
-                                            <a class="title_menu" href="#" title="Phụ kiện máy ảnh" style="width: 85%;">
-                                                <span>PHỤ KIỆN MÁY ẢNH</span>
-                                            </a>
-                                            <ul class="item_small d-flex flex-column">
-                                                <li><a href="#">Thẻ nhớ</a></li>
-                                                <li><a href="#">Pin và Sạc</a></li>
-                                                <li><a href="#">Chân máy</a></li>
-                                                <li><a href="#">Đèn Flash</a></li>
-                                                <li><a href="#">Túi máy ảnh, balo</a></li>
-                                                <li><a href="#">Bộ vệ sinh máy ảnh</a></li>
-                                                <li><a href="#">Bộ lộc ống kính</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                    @await Component.InvokeAsync("DanhMuc")
                                 </nav>
                             </div>
                         </div>
