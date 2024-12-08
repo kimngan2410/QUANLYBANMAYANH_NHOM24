@@ -13,6 +13,14 @@ builder.Configuration
 builder.Services.AddDbContext<QuanLyBanMayAnhContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian session tồn tại
+    options.Cookie.HttpOnly = true; // Bảo mật cookie
+    options.Cookie.IsEssential = true; // Cần thiết cho ứng dụng
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +37,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

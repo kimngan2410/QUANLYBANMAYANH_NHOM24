@@ -267,12 +267,48 @@ nav a {
         text-decoration: none;
     }
 
+/*icon người dùng*/
 .icon-user {
     height: 30px;
     width: 30px;
     object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
 }
 
+/* Đổi màu cho nút đăng nhập */
+.btn-custom {
+    background-color: #1E4752;
+    color: #fff;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #163840;
+    color: #fff;
+}
+
+/* Đổi màu cho liên kết */
+.text-custom {
+    color: #1E4752;
+    font-weight: bold;
+}
+
+.text-custom:hover {
+    color: #163840;
+    text-decoration: underline;
+}
+
+/*đổi màu cho button đăng ký*/
+#RegisterForm .btn-primary {
+    background-color: #1E4752;
+    border-color: #1E4752;
+}
+
+#RegisterForm .btn-primary:hover {
+    background-color: #163C46;
+    border-color: #163C46;
+}
+
+/*icon giỏ hàng*/
 .icon-cart {
     height: 35px;
     width: 35px;

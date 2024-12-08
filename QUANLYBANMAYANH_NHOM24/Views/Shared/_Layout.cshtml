@@ -30,7 +30,9 @@
                 </form>
             </div>
             <div class="user-actions">
-                <a href="#"><img class="icon-user" src="@Url.Content("~/images/user.png")" alt="Icon User"></a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#LoginMenu">
+                    <img class="icon-user" src="@Url.Content("~/images/user.png")" alt="Icon User">
+                </a>
                 <a href="#"><img class="icon-cart" src="@Url.Content("~/images/shopping-cart.png")" alt="Icon Cart"></a>
                 <a href="#"><img class="icon-heart" src="@Url.Content("~/images/heart.png")" alt="Icon Heart"></a>
             </div>
@@ -126,7 +128,12 @@
             </div>
         </div>
     </footer>
-
+    <!-- Modal đăng nhập, đăng ký -->
+    @if (ViewContext.RouteData.Values["controller"]?.ToString() == "KhachVangLai")
+    {
+        @Html.Partial("~/Views/Login/_LoginPartial.cshtml")
+    }
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
 </body>
 </html>

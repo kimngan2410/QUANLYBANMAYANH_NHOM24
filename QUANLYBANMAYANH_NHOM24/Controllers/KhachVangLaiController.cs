@@ -44,6 +44,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             ViewBag.SonySanPhams = sonySanPhams;
             ViewBag.SonyDanhMucCon = sonyDanhMucCon;
 
+            ViewData["IsKhachVangLai"] = true; // Đánh dấu là trang Khách Vãng Lai
             return View();
         }
     }
