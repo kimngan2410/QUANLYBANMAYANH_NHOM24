@@ -125,6 +125,7 @@ nav a {
 .user-actions {
     display: flex;
     align-items: center;
+    gap: 10px; /* Khoảng cách giữa các icon */
 }
 
     .user-actions a {
@@ -139,11 +140,40 @@ nav a {
     object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
 }
 
-.icon-cart {
-    height: 35px;
-    width: 35px;
-    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+
+
+.cart-icon {
+    position: relative;
+    display: inline-block;
 }
+
+    .cart-icon .icon-cart {
+        width: 30px; /* Kích thước icon giỏ hàng */
+        height: auto;
+    }
+
+.cart-count {
+    color: white !important;
+    top: -4px !important;
+}
+
+    .cart-icon .cart-count {
+        position: absolute;
+        top: -4px;
+        right: -5px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 2px 6px;
+        min-width: 50%;
+        line-height: 1;
+        height: 60%;
+    }
+
+
+
 
 .icon-heart {
     height: 25px;

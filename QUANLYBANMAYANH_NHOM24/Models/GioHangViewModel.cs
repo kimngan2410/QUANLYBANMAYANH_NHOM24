@@ -2,11 +2,11 @@
 {
     public class GioHangViewModel
     {
-        public int IdGioHang { get; set; }
-        public string TenSanPham { get; set; } = null!;
-        public string? AnhSanPham { get; set; }
-        public decimal GiaSanPham { get; set; }
+        public int IdSanPham { get; set; } // ID của sản phẩm
+        public string TenSanPham { get; set; }
+        public decimal Gia { get; set; }
+        public string DiaChiAnh { get; set; }
         public int SoLuong { get; set; }
-        public decimal ThanhTien => GiaSanPham * SoLuong;
+        public decimal ThanhTien { get; set; }
     }
 }

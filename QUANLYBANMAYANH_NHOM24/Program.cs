@@ -3,6 +3,14 @@ using QUANLYBANMAYANH_NHOM24.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cấu hình dịch vụ (services)
+builder.Services.AddDistributedMemoryCache(); // Lưu trữ session trong bộ nhớ
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian hết hạn của session
+    options.Cookie.HttpOnly = true; // Cấu hình cookie bảo mật
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -15,6 +23,8 @@ builder.Services.AddDbContext<QuanLyBanMayAnhContext>(options =>
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -26,12 +36,15 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// Cấu hình middleware
+app.UseSession(); // Kích hoạt session
+
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=KhachHang}/{action=CapNhatThongTin}/{id?}");
+    pattern: "{controller=KhachVangLai}/{action=Index}/{id?}");
 
 app.Run();

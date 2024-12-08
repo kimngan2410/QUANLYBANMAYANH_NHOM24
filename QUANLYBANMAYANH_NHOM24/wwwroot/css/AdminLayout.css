@@ -1,0 +1,166 @@
+﻿@font-face {
+    font-family: 'quicksand-regular';
+    src: url('../fonts/quicksand-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-bold';
+    src: url('../fonts/quicksand-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-semibold';
+    src: url('../fonts/quicksand-semibold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-semibold';
+    src: url('../fonts/Quicksand-Medium.ttf') format('truetype');
+}
+
+body {
+    margin: 0;
+    font-family: quicksand-regular, sans-serif;
+}
+
+/*------ Header -----*/
+header {
+    background-color: white;
+    height: 80px;
+    padding: 10px 20px;
+    color: #3D378B;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm shadow cho header */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.user-icon img {
+    width: 40px;
+    height: 40px;
+}
+
+.header-icon img {
+    width: 10px;
+    height: 10px;
+}
+
+.user-icon, .name-admin, .header-icon {
+    margin-right: 15px;
+}
+
+.admin-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #3D378B;
+    margin: 0 10px;
+}
+
+
+
+/*----------- Sidemenu ------------*/
+.sidebar {
+    background-color: #EFEAD9;
+    width: 320px;
+    height: 100vh;
+    float: left;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    position: fixed;
+    overflow: hidden;
+    z-index: 2;
+}
+
+    .sidebar a {
+        color: #3D378B;
+        text-decoration: none;
+        padding: 15px 10px;
+        display: block;
+        border-radius: 5px;
+        font-size: 20px;
+    }
+
+
+.sidebar_title {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F5F5F5;
+    padding-bottom: 10px;
+    height: 70px;
+    width: 100%;
+}
+
+    .sidebar_title img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-left: 15px;
+        margin-right: 10px;
+    }
+
+.name-store {
+    font-family: 'quicksand-bold', sans-serif;
+}
+
+    .name-store p {
+        font-family: 'quicksand-semibold', sans-serif;
+        margin-bottom: 0;
+        font-size: 16px;
+        color: #1E4752;
+    }
+
+    .name-store h2 {
+        margin-top: 5px;
+        color: #1E4752;
+        font-size: 24px;
+    }
+
+.sidebar .nav-links {
+    padding: 20px 0;
+    list-style: none;
+}
+
+    .sidebar .nav-links li {
+        margin: 0px 15px;
+        list-style: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .sidebar .nav-links li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1E4752;
+            font-size: 1rem;
+        }
+
+            .sidebar .nav-links .sub-menu li a:hover {
+                color: #E4A400;
+                font-weight: bold;
+            }
+
+        .sidebar .nav-links li a span{
+            font-size: 18px;
+            font-family: quicksand-bold, sans-serif;
+        }
+
+            .sidebar .nav-links li a i {
+                font-size: 22px;
+                margin-right: 20px;
+         
+            }
+
+/*  Main container */
+
+.container {
+    margin-left: 320px; /* Phải trùng với chiều rộng của sidebar */
+    padding: 20px; /* Tùy chỉnh khoảng cách bên trong */
+    box-sizing: border-box; /* Đảm bảo không tràn layout */
+}
+

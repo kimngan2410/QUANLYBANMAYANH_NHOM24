@@ -31,7 +31,13 @@
             </div>
             <div class="user-actions">
                 <a href="#"><img class="icon-user" src="@Url.Content("~/images/user.png")" alt="Icon User"></a>
-                <a href="#"><img class="icon-cart" src="@Url.Content("~/images/shopping-cart.png")" alt="Icon Cart"></a>
+                <a href="@Url.Action("GioHang_2", "KhachHang")">
+                    <div class="cart-icon">
+                        <img class="icon-cart" src="@Url.Content("~/images/shopping-cart.png")" alt="Icon Cart">
+                        <span class="cart-count" id="cart-count">@ViewBag.TongSoLuong</span> <!-- Số lượng sẽ thay đổi động -->
+                    </div>
+
+                </a>
                 <a href="#"><img class="icon-heart" src="@Url.Content("~/images/heart.png")" alt="Icon Heart"></a>
             </div>
         </div>

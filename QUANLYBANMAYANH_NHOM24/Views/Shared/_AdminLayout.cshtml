@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../css/AdminLayout.css" />
+    <title>Quản Lý Hạng Mục</title>
+</head>
+<body>
+    <aside>
+        <div class="sidebar">
+            <div class="sidebar_title">
+                <div style="margin-right: 10px;">
+                    <img src="@Url.Content("~/images/logo.png")" alt="HaiCoNangSlay">
+                </div>
+                <div class="name-store">
+                    <p>Tiệm ảnh</p>
+                    <h2>HaiCoNangSlay</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-clipboard"></i>
+                        <span class="link_name">Quản lý đơn hàng</span>
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="#">Danh sách đơn hàng</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="iocn-link">
+                        <a href="#">
+                            <i class="fa-solid fa-box-open"></i>
+                            <span class="link_name">Quản lý sản phẩm</span>
+                        </a>
+                        <i class='bx bxs-chevron-down arrow'></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="#">Danh sách sản phẩm</a></li>
+                        <li><a href="#">Thêm sản phẩm</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="iocn-link">
+                        <a href="#">
+                            <i class="fa-solid fa-user-gear"></i>
+                            <span class="link_name">Quản lý tài khoản</span>
+                        </a>
+                        <i class='bx bxs-chevron-down arrow'></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li><a class="link_name" href="#">Danh sách tài khoản</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="link_name">Quản lý khách hàng</span>
+                    </a>
+                    <ul class="sub-menu blank">
+                        <li><a class="link_name" href="#">Danh sách khách hàng</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <header>
+        <div class="user-icon">
+            <img src="./images/user_avatar.png" alt="User">
+        </div>
+        <div class="admin-dropdown">
+            <span class="admin-name">Administrator</span>
+        </div>
+        <div class="header-icon">
+            <i class="fa-solid fa-caret-down"></i>
+        </div>
+    </header>
+
+    <main class="container">
+        @RenderBody()
+    </main>
+</body>
+</html>
