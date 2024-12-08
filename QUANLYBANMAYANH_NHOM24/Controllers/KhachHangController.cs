@@ -105,22 +105,6 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         {
             // Kiểm tra xem người dùng đã đăng nhập hay chưa
             int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
-
-            if (idNguoiDung == null) // Nếu chưa đăng nhập
-            {
-                // Trả về Partial View đăng nhập
-                var partialHtml = _viewRenderHelper.RenderPartialViewToString(this, "_LoginPartial", new LoginViewModel());
-
-
-                return Json(new
-                {
-                    success = false,
-                    message = "Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng.",
-                    partialLoginHtml = partialHtml // Gửi HTML của Partial View xuống client
-                });
-            }
-
-
             var gioHang = _context.GioHangs
                 .Where(gh => gh.Idnguoidung == idNguoiDung)
                 .Include(gh => gh.IdsanphamNavigation)
