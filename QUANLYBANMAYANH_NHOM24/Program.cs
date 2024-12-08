@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QUANLYBANMAYANH_NHOM24.Models;
+using QUANLYBANMAYANH_NHOM24.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ViewRenderHelper>();
 
 // Cấu hình dịch vụ (services)
 builder.Services.AddDistributedMemoryCache(); // Lưu trữ session trong bộ nhớ

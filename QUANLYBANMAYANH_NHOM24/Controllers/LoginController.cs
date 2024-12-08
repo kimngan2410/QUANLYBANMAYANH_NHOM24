@@ -24,40 +24,30 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         [HttpPost]
         public IActionResult Login([FromForm] LoginViewModel model)
         {
-            // Kiểm tra nếu model không hợp lệ
             if (!ModelState.IsValid)
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
                                                      .Select(e => e.ErrorMessage)
                                                      .ToList();
 
-                return Json(new
-                {
-                    success = false,
-                    message = string.Join(" ", errorMessages) // Gộp các lỗi lại
-                });
+                return Json(new { success = false, message = string.Join(" ", errorMessages) });
             }
 
-            // Kiểm tra thông tin người dùng trong cơ sở dữ liệu
             var user = _context.NguoiDungs
                                .FirstOrDefault(u => u.Email == model.Email && u.Matkhau == model.MatKhau);
 
             if (user == null)
             {
-                return Json(new
-                {
-                    success = false,
-                    message = "Email hoặc mật khẩu không đúng."
-                });
+                return Json(new { success = false, message = "Email hoặc mật khẩu không đúng." });
             }
 
-            // Đăng nhập thành công: lưu thông tin người dùng vào Session
-            HttpContext.Session.SetString("UserEmail", user.Email);
+            // Lưu IdNguoiDung vào session
+            HttpContext.Session.SetInt32("IdNguoiDung", user.Idnguoidung); // Lưu ID người dùng
 
             return Json(new
             {
                 success = true,
-                redirectUrl = Url.Action("Index", "KhachVangLai") // URL điều hướng sau khi đăng nhập thành công
+                redirectUrl = Url.Action("Index", "KhachVangLai")
             });
         }
     }

@@ -33,16 +33,19 @@
                 <a href="#" data-bs-toggle="modal" data-bs-target="#LoginMenu">
                     <img class="icon-user" src="@Url.Content("~/images/user.png")" alt="Icon User">
                 </a>
-                <a href="#"><img class="icon-cart" src="@Url.Content("~/images/shopping-cart.png")" alt="Icon Cart"></a>
-                <a href="#"><img class="icon-user" src="@Url.Content("~/images/user.png")" alt="Icon User"></a>
                 <a href="@Url.Action("GioHang_2", "KhachHang")">
-                    <div class="cart-icon">
+                    <div class="cart">
                         <img class="icon-cart" src="@Url.Content("~/images/shopping-cart.png")" alt="Icon Cart">
                         <span class="cart-count" id="cart-count">@ViewBag.TongSoLuong</span> <!-- Số lượng sẽ thay đổi động -->
                     </div>
 
                 </a>
-                <a href="#"><img class="icon-heart" src="@Url.Content("~/images/heart.png")" alt="Icon Heart"></a>
+                <a href="#">
+                    <div class="heart">
+                        <img class="icon-heart" src="@Url.Content("~/images/heart.png")" alt="Icon Heart">
+                        <span class="heart-count" id="cart-count">0</span> <!-- Số lượng sẽ thay đổi động -->
+                    </div>
+                </a>
             </div>
         </div>
 

@@ -120,6 +120,10 @@
             }
         </div>
 
+    <!--INPUT IDNGUOI DUNG ẨN-->
+    <input type="hidden" id="hidden-user-id" value="@ViewBag.IdNguoiDung">
+
+
 
 
         <!--Scipt-->
@@ -130,29 +134,37 @@
             $.ajax({
                 url: '/KhachHang/ThemVaoGioHang',
                 type: 'POST',
-                data: {
-                    idSanPham: idSanPham,
-                    soLuong: soLuong
-                },
+                data: { idSanPham: idSanPham, soLuong: soLuong },
                 success: function (response) {
                     if (response.success) {
-                        // Hiển thị thông báo thành công
                         Swal.fire({
                             icon: 'success',
                             title: 'Thành công!',
                             text: 'Sản phẩm đã được thêm vào giỏ hàng.',
-                            timer: 2000, // Thời gian tự đóng (2 giây)
+                            timer: 2000,
                             showConfirmButton: false
                         });
 
-                        // Cập nhật số lượng giỏ hàng
-                        $('#cart-count').text(response.cartCount);
+                        $('#cart-count').text(response.cartCount); // Cập nhật số lượng giỏ hàng
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi',
-                            text: 'Không thể thêm sản phẩm vào giỏ hàng.'
-                        });
+                        // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+                        if (response.redirectUrl) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Thông báo',
+                                text: response.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = response.redirectUrl;
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: response.message
+                            });
+                        }
                     }
                 },
                 error: function () {
@@ -164,6 +176,7 @@
                 }
             });
         }
+
 
 
         // Gọi hàm này khi tải trang để cập nhật số lượng giỏ hàng
@@ -182,5 +195,4 @@
             });
         });
     </script>
-
 </div>

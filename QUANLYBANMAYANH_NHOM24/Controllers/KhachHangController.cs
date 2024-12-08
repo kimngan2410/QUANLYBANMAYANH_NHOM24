@@ -4,6 +4,10 @@ using QUANLYBANMAYANH_NHOM24.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using QUANLYBANMAYANH_NHOM24.Utilities;
 
 
 namespace QUANLYBANMAYANH_NHOM24.Controllers
@@ -11,10 +15,12 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
     public class KhachHangController : Controller
     {
         private readonly QuanLyBanMayAnhContext _context;
+        private readonly ViewRenderHelper _viewRenderHelper;
 
-        public KhachHangController(QuanLyBanMayAnhContext context)
+        public KhachHangController(QuanLyBanMayAnhContext context, ViewRenderHelper viewRenderHelper)
         {
             _context = context;
+            _viewRenderHelper = viewRenderHelper; // Gán ViewRenderHelper vào biến _viewRenderHelper
         }
 
 
@@ -31,10 +37,25 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         [HttpPost]
         public IActionResult ThemVaoGioHang(int idSanPham, int soLuong)
         {
-            // Sử dụng giá trị mặc định cho Idnguoidung
-            int defaultUserId = 1;
+            // Kiểm tra xem người dùng đã đăng nhập hay chưa
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
 
-            var gioHang = _context.GioHangs.FirstOrDefault(gh => gh.Idnguoidung == defaultUserId && gh.Idsanpham == idSanPham);
+            if (idNguoiDung == null) // Nếu chưa đăng nhập
+            {
+                // Trả về Partial View đăng nhập
+                var partialHtml = _viewRenderHelper.RenderPartialViewToString(this, "_LoginPartial", new LoginViewModel());
+
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng.",
+                    partialLoginHtml = partialHtml // Gửi HTML của Partial View xuống client
+                });
+            }
+
+            // Nếu đã đăng nhập, xử lý thêm sản phẩm vào giỏ hàng
+            var gioHang = _context.GioHangs.FirstOrDefault(gh => gh.Idnguoidung == idNguoiDung && gh.Idsanpham == idSanPham);
 
             if (gioHang != null)
             {
@@ -45,40 +66,63 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             {
                 var newGioHang = new GioHang
                 {
-                    Idnguoidung = defaultUserId,
+                    Idnguoidung = idNguoiDung.Value, // Gắn sản phẩm vào tài khoản hiện tại
                     Idsanpham = idSanPham,
                     Soluong = soLuong
                 };
                 _context.GioHangs.Add(newGioHang);
             }
+
             _context.SaveChanges();
 
-
-            // Tính lại số lượng sản phẩm trong giỏ hàng
-            int cartCount = _context.GioHangs.Where(gh => gh.Idnguoidung == defaultUserId).Sum(gh => gh.Soluong);
+            // Cập nhật số lượng giỏ hàng
+            int cartCount = _context.GioHangs.Where(gh => gh.Idnguoidung == idNguoiDung).Sum(gh => gh.Soluong);
 
             return Json(new { success = true, cartCount = cartCount });
         }
+
+
 
 
         /*--- Cập nhật số lượng sản phẩm trong giỏ hàng ---*/
         [HttpGet]
         public IActionResult LaySoLuongGioHang()
         {
-            int defaultUserId = 1; // ID người dùng mặc định
-            int cartCount = _context.GioHangs.Where(gh => gh.Idnguoidung == defaultUserId).Sum(gh => gh.Soluong);
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
+
+            if (idNguoiDung == null)
+            {
+                return Json(new { success = false, message = "Bạn chưa đăng nhập." });
+            }
+
+            int cartCount = _context.GioHangs.Where(gh => gh.Idnguoidung == idNguoiDung).Sum(gh => gh.Soluong);
 
             return Json(new { success = true, cartCount = cartCount });
         }
 
 
-
         public IActionResult GioHang_2()
         {
-            int userId = 1; // Thay bằng Idnguoidung thực tế của người dùng hiện tại
+            // Kiểm tra xem người dùng đã đăng nhập hay chưa
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
+
+            if (idNguoiDung == null) // Nếu chưa đăng nhập
+            {
+                // Trả về Partial View đăng nhập
+                var partialHtml = _viewRenderHelper.RenderPartialViewToString(this, "_LoginPartial", new LoginViewModel());
+
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng.",
+                    partialLoginHtml = partialHtml // Gửi HTML của Partial View xuống client
+                });
+            }
+
 
             var gioHang = _context.GioHangs
-                .Where(gh => gh.Idnguoidung == userId)
+                .Where(gh => gh.Idnguoidung == idNguoiDung)
                 .Include(gh => gh.IdsanphamNavigation)
                 .Select(gh => new GioHangViewModel
                 {
@@ -109,6 +153,9 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             return View(gioHang);
         }
 
+       
+
+
         [HttpPost]
         public IActionResult CapNhatSoLuong([FromBody] CapNhatSoLuongRequest request)
         {
@@ -120,12 +167,11 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                     return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
                 }
 
-                int defaultUserId = 1;
-
+                // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
                 var gioHang = _context.GioHangs
                     .Include(gh => gh.IdsanphamNavigation) // Bắt buộc phải nạp thông tin chi tiết sản phẩm
-                    .FirstOrDefault(gh => gh.Idnguoidung == defaultUserId && gh.Idsanpham == request.IdSanPham);
-
+                    .FirstOrDefault(gh => gh.Idnguoidung == idNguoiDung && gh.Idsanpham == request.IdSanPham);
 
                 // Kiểm tra xem giỏ hàng có tồn tại không
                 if (gioHang == null)
@@ -162,7 +208,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 // Tính toán lại thành tiền và tổng thanh toán
                 var thanhTienMoi = gioHang.Soluong * gioHang.IdsanphamNavigation.Gia;
                 var tongThanhTien = _context.GioHangs
-                    .Where(gh => gh.Idnguoidung == defaultUserId)
+                    .Where(gh => gh.Idnguoidung == idNguoiDung)
                     .Include(gh => gh.IdsanphamNavigation) // Nạp thông tin sản phẩm
                     .Sum(gh => gh.Soluong * gh.IdsanphamNavigation.Gia);
 
@@ -180,6 +226,8 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 return Json(new { success = false, message = "Đã xảy ra lỗi: " + ex.Message });
             }
         }
+
+        
 
 
 
@@ -297,6 +345,9 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         public int IdSanPham { get; set; }
         public int ThayDoi { get; set; } // +1 hoặc -1
     }
+
+  
+
 
 }
 
