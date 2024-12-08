@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Giỏ hàng 2";
+}
+
+<link rel="stylesheet" type="text/css" href="./../css/GioHang_2.css">
+
+<div class="customer-cart">
+    <div class="breadcrumb">
+        <a href="/" class="home">Trang chủ</a>
+        <span class="dot">•</span>
+        <a class="cart">Giỏ hàng</a>
+    </div>
+
+    <div class="cart-container">
+        <div class="product-quantity-cart">
+            <h1>Giỏ hàng</h1>
+            <div class="product-count">
+                <p class="quantity">0</p>
+                <p>sản phẩm</p>
+            </div>
+        </div>
+            
+       <!-----San pham------>
+        <div class="product-container mt-4">
+            <table class="table table-borderless table-custom">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th style="text-align: right;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal grandTotal = 0; // Biến để lưu tổng tiền của tất cả sản phẩm
+                    }
+                    @foreach (var item in Model)
+                    {
+                        var itemTotal = item.Price * item.Quantity; // Tính tiền của từng sản phẩm
+                        grandTotal += itemTotal; // Cộng tiền của sản phẩm vào tổng tiền chung
+                        <tr>
+                            <td>
+                                <div class="product-info d-flex align-items-flex-start">
+                                    <div class="img-thumbnail">
+                                        <img src="@item.ImageUrl" alt="@item.ProductName">
+                                    </div>
+                                    <span class="ms-3">@item.ProductName</span>
+                                </div>
+                            </td>
+                            <td>@String.Format("{0:0,0} ₫", item.Price)</td>
+                            <td>
+                                <div class="input-group">
+                                    <button class="btn-quatity" id="decrement">-</button>
+                                    <input type="text" class="form-control text-center" value="@item.Quantity">
+                                    <button class="btn-quatity" id="increment">+</button>
+                                </div>
+                            </td>
+                            <td>@String.Format("{0:0,0} ₫", item.Price * item.Quantity)</td>
+                            <td style="text-align: right;">
+                                <button class="btn">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-----Giảm giá và tổng tiền------>
+    <div class="discount-container">
+        <div class="discount">
+            <label for="discount-code" class="discount-label">Ưu đãi và mã giảm giá</label>
+            <input type="text" id="discount-code" class="discount-input" placeholder="Nhập mã giảm giá">
+            <button class="apply-button">Áp dụng</button>
+        </div>
+
+        <div class="total-amount">
+            <div class="value">
+                <span class="total-label">Tổng thanh toán:</span>
+                <span class="total-value">@String.Format("{0:0,0} ₫", grandTotal)</span>
+            </div>
+            <button class="checkout-button" onclick="window.location.href='@Url.Action("ThanhToan", "KhachHang")'">Thanh toán</button>
+        </div>
+    </div>
+</div>

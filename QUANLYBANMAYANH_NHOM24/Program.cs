@@ -41,6 +41,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=KhachVangLai}/{action=Index}/{id?}");
+    pattern: "{controller=KhachHang}/{action=CapNhatThongTin}/{id?}");
 
 app.Run();

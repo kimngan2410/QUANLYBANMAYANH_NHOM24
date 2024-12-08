@@ -1,0 +1,53 @@
+﻿@model List<DanhMuc>
+
+<ul class="item_big" style="padding: 20px;">
+    <!-- Item 1 -->
+    @foreach (var danhMuc in Model.Where(d => d.Iddanhmuc == 1))
+    {
+        <li class="nav-item" style="width: 220px;">
+            <img src="./../images/danhmuc_mayanh.jpg" alt="Máy ảnh" style="width: 100px; height: 100px; object-fit: contain;">
+            <a class="title_menu" href="#" title="Máy chụp ảnh">
+                <span>@danhMuc.Tendanhmuc</span>
+            </a>
+            <ul class="item_small d-flex flex-column">
+            @foreach (var danhMucCon in danhMuc.DanhMucCons.Where(d => d.Iddanhmuc == danhMuc.Iddanhmuc))
+                {
+                    <li><a href="#">@danhMucCon.Tendanhmuccon</a></li>
+                }
+            </ul>
+        </li>
+    }
+
+    <!-- Item 2 -->
+    @foreach (var danhMuc in Model.Where(d => d.Iddanhmuc == 2))
+    {
+        <li class="nav-item" style="width: 230px;">
+            <img src="./../images/danhmuc_ongkinh.jpg" alt="Ống kính" style="width: 100px; height: 100px; object-fit: cover;">
+            <a class="title_menu" href="#" title="Ống kính">
+                <span>@danhMuc.Tendanhmuc</span>
+            </a>
+            <ul class="item_small d-flex flex-column">
+                @foreach (var danhMucCon in danhMuc.DanhMucCons.Where(d => d.Iddanhmuc == danhMuc.Iddanhmuc))
+                {
+                    <li><a href="#">@danhMucCon.Tendanhmuccon</a></li>
+                }
+            </ul>
+        </li>
+    }
+
+    <!-- Item 3 -->
+    @foreach (var danhMuc in Model.Where(d => d.Iddanhmuc == 3))
+    {
+        <li class="nav-item" style="width: 230px;">
+            <img src="./../images/danhmuc_phukien.jpg" alt="Phụ kiện máy ảnh" style="width: 100px; height: 100px; object-fit: cover;">            <a class="title_menu" href="#" title="Ống kính">
+                <span>@danhMuc.Tendanhmuc</span>
+            </a>
+            <ul class="item_small d-flex flex-column">
+                @foreach (var danhMucCon in danhMuc.DanhMucCons.Where(d => d.Iddanhmuc == danhMuc.Iddanhmuc))
+                {
+                    <li><a href="#">@danhMucCon.Tendanhmuccon</a></li>
+                }
+            </ul>
+        </li>
+    }
+</ul>

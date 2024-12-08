@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<link rel="stylesheet" type="text/css" href="./../css/ThanhToan.css">
+
+
+<div class="breadcrumb">
+    <a href="/" class="home">Trang chủ</a>
+    <span class="dot">•</span>
+    <a class="payment">Thanh toán</a>
+</div>
+
+<div class="payment-container mt-5">
+    <div class="row">
+        <!-- Phần địa chỉ thanh toán -->
+        <div class="payment-address col-md-6">
+            <h4>Địa chỉ thanh toán</h4>
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ">
+                </div>              
+                
+            </form>
+
+            <form>
+                <div class="note mt-10">
+                    <h4 for="note" class="form-label">Ghi chú đơn hàng</h4>
+                    <textarea class="form-control" id="note" rows="3" placeholder="Lời nhắn cho người bán"></textarea>
+                </div>
+            </form>
+
+            <form>
+                <div class="methoth-payment">
+                    <h4>Phương thức thanh toán</h4>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="payment" value="bank_transfer" checked>
+                            <div class="icon">
+                                <img src="./../images/chuyenkhoan.png" alt="Chuyển khoản ngân hàng">
+                                <span>Chuyển khoản ngân hàng</span>
+                            </div>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="payment" value="cash_on_delivery">
+                            <div class="icon">
+                                <img src="./../images/tienmat.png" alt="Trả tiền mặt khi nhận hàng">
+                                <span>Trả tiền mặt khi nhận hàng</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Phần sản phẩm đã mua -->
+        <div class="payment-product col-md-6">
+            <h4>Sản phẩm đã mua</h4>
+            <hr>
+            <table>
+                <tbody>
+                    @{
+                        decimal grandTotal = 0; // Biến để lưu tổng tiền của tất cả sản phẩm
+                    }
+                     @foreach (var item in Model)
+                    {
+                        var itemTotal = item.Price * item.Quantity; // Tính tiền của từng sản phẩm
+                        grandTotal += itemTotal; // Cộng tiền của sản phẩm vào tổng tiền chung
+                        <tr>
+                            <td>
+                                <div class="img-thumbnail">
+                                    <img src="@item.ImageUrl" alt="@item.ProductName">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="product-info">
+                                    <span class="name-product">@item.ProductName</span>
+                                    <span class="quantity-product">SL: @item.Quantity</span>
+                                    <span class="price-product">@String.Format("{0:0,0} ₫", item.Price * item.Quantity)</span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <hr>
+            <div class="provisional d-flex justify-content-between">
+                <p>Tạm tính</p>
+                <p>@String.Format("{0:0,0} ₫", grandTotal)</p>
+            </div>
+            <div class="total d-flex justify-content-between fw-bold">
+                <p>Tổng</p>
+                <p>@String.Format("{0:0,0} ₫", grandTotal)</p>
+            </div>
+             <button class="btn btn-primary w-100 mt-3" onclick="window.location.href='@Url.Action("DatHangThanhCong", "KhachHang")'">Thanh toán</button>
+        </div>
+    </div>
+</div>
+
+

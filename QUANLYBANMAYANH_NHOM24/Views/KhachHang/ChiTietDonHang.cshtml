@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+}
+
+<link rel="stylesheet" type="text/css" href="./../css/ChiTietDonHang.css">
+
+
+<div class="breadcrumb">
+    <a href="/" class="home">Trang chủ</a>
+    <span class="dot">•</span>
+    <a class="account">Tài khoản</a>
+    <span class="dot">•</span>
+    <a class="order-history">Lịch sử đơn hàng</a>
+    <span class="dot">•</span>
+    <a class="order-details">Đơn hàng 9951</a>
+</div>
+
+<div class="profile-container mt-5">
+    <div class="sidebar col-md-6">
+        <div class="avtar-name-user">
+            <img src="./../images/user_avatar.png" />
+            <h2>Nguyễn Văn A</h2>
+        </div>
+        <ul>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="user">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order">
+                    <i class="fa-solid fa-clipboard"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DiaChiNhanHang", "KhachHang")" class="address">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Địa chỉ giao hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DoiMatKhau", "KhachHang")" class="change-pass">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="order-details-list col-md-6">
+        <h2>Đơn hàng 9951</h2>
+        <p class="date-order mb-20">
+            Ngày đặt hàng: 
+            <span class="date fw-7 c-third">07/12/2024</span>
+        </p>
+        <div class="order-list-items">
+            <table class="table-order">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th style="text-align: right;">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal grandTotal = 0; // Biến để lưu tổng tiền của tất cả sản phẩm
+                    }
+                    @foreach (var item in Model)
+                    {
+                        var itemTotal = item.Price * item.Quantity; // Tính tiền của từng sản phẩm
+                        grandTotal += itemTotal; // Cộng tiền của sản phẩm vào tổng tiền chung
+                        <tr>
+                            <td>
+                                <div class="order-info">
+                                    <div class="img-thumbnail">
+                                        <img src="@item.ImageUrl" alt="@item.ProductName">
+                                    </div>
+                                    <span class="ms-3">@item.ProductName</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span>@String.Format("{0:0,0} ₫", item.Price)</span>
+                            </td>
+                            <td>x @item.Quantity</td>
+                            <td style="text-align: right;">@String.Format("{0:0,0} ₫", item.Price * item.Quantity)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>           
+        </div>
+            
+        <div class="info-details">
+            <div class="order-methoth-status">
+                <p>
+                    Tình trạng đơn hàng:
+                    <span>Tạm giữ</span>
+                </p>
+                <p>
+                    Phương thức thanh toán:
+                    <span>Tiền mặt khi nhận hàng</span>
+                </p>
+            </div>
+            <div class="order-details-total">
+                <p>
+                    Tổng tiền:
+                    <span>@String.Format("{0:0,0} ₫", grandTotal)</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-------------  Scrip  t--------------->
+
+</div>

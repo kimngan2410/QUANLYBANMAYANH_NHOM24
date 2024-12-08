@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QUANLYBANMAYANH_NHOM24.Models;
 
 namespace QUANLYBANMAYANH_NHOM24.Controllers
@@ -14,8 +15,12 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
         public IActionResult Index()
         {
-            var danhMuc = _context.DanhMucs.ToList(); // Lấy tất cả các danh mục
-            return View(danhMuc);
+            // Lấy danh sách danh mục và danh mục con
+            var danhMucs = _context.DanhMucs
+                .Include(dm => dm.DanhMucCons) // Gộp danh sách con
+                .ToList();
+            
+            return View(danhMucs);
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Địa Chỉ nhận hàng";
+}
+
+<link rel="stylesheet" type="text/css" href="./../css/DiaChiNhanHang.css">
+
+
+<div class="breadcrumb">
+    <a href="/" class="home">Trang chủ</a>
+    <span class="dot">•</span>
+    <a class="account">Tài khoản</a>
+    <span class="dot">•</span>
+    <a class="address">Địa chỉ nhận hàng</a>
+</div>
+
+<div class="profile-container mt-5">
+    <div class="sidebar col-md-6">
+        <div class="avtar-name-user">
+            <img src="./../images/user_avatar.png" />
+            <h2>Nguyễn Văn A</h2>
+        </div>
+        <ul>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="user">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order">
+                    <i class="fa-solid fa-clipboard"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DiaChiNhanHang", "KhachHang")" class="address">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Địa chỉ giao hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DoiMatKhau", "KhachHang")" class="change-pass">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="delivery-address col-md-6">
+        <h2>Thông tin cá nhân</h2>
+        <div class="address-info">
+            <form method="post">
+                <div class="form-group">
+                    <label for="fullName">Họ và tên</label>
+                    <input type="text" id="fullName" name="fullName" value="Lê Thị Kim Ngân" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="text" id="phone" name="phone" value="0123456789" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Địa chỉ</label>
+                    <input class="addres-details" type="text" id="address" name="address" value="Tổ 2 thôn Phước Thái, xã Hoà Nhơn, huyện Hoà Vang, Tp.Đà Nẵng" required>
+                </div>
+            </form>
+            <div class="form-group">
+                <button type="submit" class="btn-confirm">Xác nhận</button>
+            </div
+        </div>
+    </div>
+
+
+
+    <!-------------  Scrip  t--------------->
+
+</div>

@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Lịch sử đơn hàng";
+}
+
+<link rel="stylesheet" type="text/css" href="./../css/LichSuDonHang.css">
+
+
+<div class="breadcrumb">
+    <a href="/" class="home">Trang chủ</a>
+    <span class="dot">•</span>
+    <a class="account">Tài khoản</a>
+    <span class="dot">•</span>
+    <a class="order-history">Lịch sử đơn hàng</a>
+</div>
+
+<div class="profile-container mt-5">
+    <div class="sidebar col-md-6">
+        <div class="avtar-name-user">
+            <img src="./../images/user_avatar.png" />
+            <h2>Nguyễn Văn A</h2>
+        </div>
+        <ul>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="user">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order">
+                    <i class="fa-solid fa-clipboard"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DiaChiNhanHang", "KhachHang")" class="address">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Địa chỉ giao hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DoiMatKhau", "KhachHang")" class="change-pass">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="order-list col-md-6">
+        <h2>Lịch sử đơn hàng</h2>
+        <div class="order-list-items">
+            <div class="order-search-box">
+                <form action="/search" method="GET">
+                    <input type="text" name="query" placeholder="Tìm kiếm" />
+                    <button type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>            <table>
+                <thead>
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Ngày đặt hàng</th>
+                        <th>Tổng tiền</th>
+                        <th style="text-align: right;">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("ChiTietDonHang", "KhachHang")">9951</a>
+                         </td>
+                        <td>23/11/2024</td>
+                        <td>43.790.000 đ</td>
+                        <td class="status reserved">Tạm giữ</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#">9952</a>
+                        </td>
+                        <td>23/11/2024</td>
+                        <td>40.190.000 đ</td>
+                        <td class="status processing">Đang xử lý</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+            
+    </div>
+
+
+
+    <!-------------  Scrip  t--------------->
+
+</div>

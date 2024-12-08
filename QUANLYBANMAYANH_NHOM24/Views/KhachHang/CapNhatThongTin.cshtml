@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Cập nhật thông tin cá nhân";
+}
+
+<link rel="stylesheet" type="text/css" href="./../css/CapNhatThongTin.css">
+
+
+<div class="breadcrumb">
+    <a href="/" class="home">Trang chủ</a>
+    <span class="dot">•</span>
+    <a class="user-info">Tài khoản</a>
+</div>
+
+<div class="profile-container mt-5">
+    <div class="sidebar col-md-6">
+        <div class="avtar-name-user">
+            <img src="./../images/user_avatar.png" />
+            <h2>Nguyễn Văn A</h2>
+        </div>
+        <ul>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="user">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order">
+                    <i class="fa-solid fa-clipboard"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DiaChiNhanHang", "KhachHang")" class="address">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Địa chỉ giao hàng</span>
+                </a>
+            </li>
+            <li class="acc-menu-items">
+                <a href="@Url.Action("DoiMatKhau", "KhachHang")" class="change-pass">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Đổi mật khẩu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="profile-info col-md-6">
+        <h2>Thông tin cá nhân</h2>
+        <div class="user-profile">
+            <div class="info-input">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="fullName">Họ và tên</label>
+                        <input type="text" id="fullName" name="fullName" value="Lê Thị Kim Ngân" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại</label>
+                        <input type="text" id="phone" name="phone" value="0123456789" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="kehtimngan@gmail.com" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">Ngày sinh</label>
+                        <input type="date" id="birthDate" name="birthDate" required>
+                    </div>
+                    <div class="gender-group">
+                        <label>Giới tính</label>
+                        <select name="gender" id="gender">
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn">Cập nhật thông tin</button>
+                    </div>
+                </form>
+            </div>
+            <div class="avatar">
+                <img src="./../images/user_avatar.png" alt="Avatar">
+                <button type="submit" class="btn-choose-image">Chọn ảnh</button>
+                <p>
+                    Dụng lượng file tối đa 1 MB
+                    <br />Định dạng:.JPEG, .PNG
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-------------  Scrip  t--------------->
+
+</div>
