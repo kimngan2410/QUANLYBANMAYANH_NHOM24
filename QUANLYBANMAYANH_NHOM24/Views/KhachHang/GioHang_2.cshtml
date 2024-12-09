@@ -1,12 +1,10 @@
 ﻿@model IEnumerable<GioHangViewModel>
 
 @{
+    Layout = "~/Views/Shared/_KhachHangLayout.cshtml";
     ViewData["Title"] = "Giỏ hàng 2";
 }
 
-@{
-    Layout = "_KhachHangLayout";
-}
 
 <link rel="stylesheet" type="text/css" href="./../css/GioHang_2.css">
 
@@ -21,7 +19,7 @@
         <div class="product-quantity-cart">
             <h1>Giỏ hàng</h1>
             <div class="product-count">
-                <p class="quantity">0</p>
+                <p class="quantity">@ViewBag.TongSoLuong</p>
                 <p>sản phẩm</p>
             </div>
         </div>
@@ -91,7 +89,7 @@
                 <span class="total-label">Tổng thanh toán:</span>
                 <span class="total-value">@ViewBag.TongThanhTien.ToString("C0")</span>
             </div>
-            <button class="checkout-button" onclick="window.location.href='@Url.Action("ThanhToan", "KhachHang")'">Thanh toán</button>
+            <button class="checkout-button" onclick="window.location.href='@Url.Action("ThanhToan", "KhachHang")'">Đặt hàng</button>
         </div>
     </div>
 </div>
@@ -99,7 +97,7 @@
 
 <!--  Script  -->
 <script>
-    function capNhatSoLuong(idSanPham, thayDoi) {
+        function capNhatSoLuong(idSanPham, thayDoi) {
         const url = '/KhachHang/CapNhatSoLuong'; // Endpoint API trong Controller
         const data = {
             idSanPham: idSanPham,

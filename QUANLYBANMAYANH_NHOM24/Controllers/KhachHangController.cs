@@ -223,11 +223,12 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         /*-----------------THANH TOÁN---------------*/
         public IActionResult ThanhToan()
         {
-            int userId = 1; // Thay bằng Idnguoidung thực tế của người dùng hiện tại
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
+
 
             // Lấy danh sách giỏ hàng kiểu CartItem
             var cartItems = _context.GioHangs
-                .Where(gh => gh.Idnguoidung == userId)
+                .Where(gh => gh.Idnguoidung == idNguoiDung)
                 .Include(gh => gh.IdsanphamNavigation)
                 .ToList();
 

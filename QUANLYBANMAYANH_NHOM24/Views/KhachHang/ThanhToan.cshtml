@@ -22,30 +22,23 @@
         <!-- Phần địa chỉ thanh toán -->
         <div class="payment-address col-md-6">
             <h4>Địa chỉ thanh toán</h4>
-            <form>
+            <form asp-action="XacNhanThanhToan" method="post">
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="name" placeholder="Nhập họ và tên">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Nhập họ và tên" required>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại">
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ">
-                </div>              
-                
-            </form>
-
-            <form>
-                <div class="note mt-10">
-                    <h4 for="note" class="form-label">Ghi chú đơn hàng</h4>
-                    <textarea class="form-control" id="note" rows="3" placeholder="Lời nhắn cho người bán"></textarea>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ">
                 </div>
-            </form>
-
-            <form>
+                <div class="mb-3">
+                    <label for="note" class="form-label">Ghi chú đơn hàng</label>
+                    <textarea class="form-control" id="note" name="note" rows="3" placeholder="Lời nhắn cho người bán"></textarea>
+                </div>
                 <div class="methoth-payment">
                     <h4>Phương thức thanh toán</h4>
                     <div class="radio-group">
@@ -74,7 +67,7 @@
             <hr>
             <table>
                 <tbody>
-                     @foreach (var item in Model)
+                    @foreach (var item in Model)
                     {
                         <tr>
                             <td>
@@ -102,9 +95,43 @@
                 <p>Tổng</p>
                 <p>@ViewBag.TongThanhTien.ToString("C0")</p>
             </div>
-             <button class="btn btn-primary w-100 mt-3" onclick="window.location.href='@Url.Action("DatHangThanhCong", "KhachHang")'">Thanh toán</button>
+            <button class="btn btn-primary w-100 mt-3" id="btnThanhToan">Thanh toán</button>
+
         </div>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#btnThanhToan').click(function () {
+        // Lấy dữ liệu từ các trường trong form
+        var data = {
+            tenNguoiNhan: $('#name').val(),
+            sdtNguoiNhan: $('#phone').val(),
+            diaChi: $('#address').val(),
+            ghiChu: $('#note').val(),
+            idPhuongThucThanhToan: $('input[name="payment"]:checked').val()
+        };
+
+        // Gửi AJAX POST request đến Controller
+        $.ajax({
+            url: '@Url.Action("XacNhanThanhToan", "KhachHang")', // URL của Controller
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data), // Chuyển dữ liệu sang JSON
+            success: function (response) {
+                if (response.success) {
+                    // Nếu thành công, chuyển đến trang xác nhận
+                    window.location.href = '@Url.Action("DatHangThanhCong", "KhachHang")';
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (error) {
+                alert("Đã xảy ra lỗi trong quá trình thanh toán.");
+                console.error(error);
+            }
+        });
+    });
+</script>
 
