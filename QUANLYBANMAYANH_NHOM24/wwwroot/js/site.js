@@ -99,6 +99,7 @@
     if (registerForm) {
         registerForm.addEventListener("submit", function (event) {
             event.preventDefault(); // Ngăn form gửi theo cách mặc định
+            console.log("Đang gửi form đăng ký...");
 
             // Xóa lỗi cũ trước khi gửi
             const errorFields = document.querySelectorAll("#registerForm .text-danger");
@@ -106,14 +107,19 @@
 
             const formData = new FormData(registerForm);
 
-            fetch(this.action, {
+            fetch(registerForm.action, {
                 method: "POST",
                 body: formData,
             })
-                .then((response) => response.json())
+                .then((response) => {
+                    console.log("Phản hồi từ server:", response);
+                    if (!response.ok) throw new Error("Phản hồi không hợp lệ");
+                    return response.json();
+                })
                 .then((data) => {
+                    console.log("Kết quả JSON:", data);
                     if (data.success) {
-                        alert(data.message); // Hiển thị thông báo thành công
+                        alert(data.message); // Hiển thị thông báo thành công!
                         // Reset form nếu cần
                         registerForm.reset();
                     } else {
