@@ -1,0 +1,96 @@
+﻿/* Tìm kiếm */
+.product-search-box {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 25px;
+    border: 1px solid #1E4752;
+    width: 90%;
+    margin: 20px auto;
+}
+
+    .product-search-box input {
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+        margin: 0;
+        width: 920px;
+    }
+
+    .product-search-box button {
+        background-color: #fff;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        padding: 10px 15px;
+        margin: 0;
+    }
+
+    .product-search-box i {
+        color: #1E4752;
+        padding: 0 20px; /* Màu biểu tượng */
+    }
+
+/* Cấu hình chung cho bảng */
+.product-table {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 15px auto;
+    border: 1px solid #ddd;
+}
+
+    .product-table th, .product-table td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    .product-table th {
+        background-color: #f4f4f4;
+    }
+
+/* Cột tên sản phẩm */
+.product-name {
+    display:flex;
+    align-items: flex-start;
+}
+.product-name span {
+    font-family: 'quicksand-bold', sans-serif;
+}
+
+.img-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    border: 1px solid #E9E8E8;
+    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .img-thumbnail img {
+        width: 80%;
+        object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+    }
+
+/* Thao tác */
+button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.edit-btn i, .delete-btn i{
+    color: #1E4752;
+    font-size: 20px;
+}
+
+    .edit-btn:hover, .delete-btn:hover {
+        opacity: 0.8;
+    }

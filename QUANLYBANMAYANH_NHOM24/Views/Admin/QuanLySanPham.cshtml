@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+<link rel="stylesheet" href="../css/QuanLySanPham.css">
+
+<div class="product-search-box">
+    <form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Tìm kiếm" />
+        <button type="submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
+
+<span style="margin-left: 55px; font-size: 20px; font-weight: bold; margin-top: 30px;">1 Sản phẩm</span>
+
+<table class="product-table">
+    <thead>
+        <tr>
+            <th class="checkbox-column">
+                <input type="checkbox" id="select-all">
+            </th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng đã bán</th>
+            <th>Đơn giá</th>
+            <th>Tồn kho</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>
+                <div class="product-name d-flex align-items-flex-start">
+                    <div class="img-thumbnail">
+                        <img src="@Url.Content("~/images/instax_camera.png")" alt="">
+                    </div>
+                    <span class="ms-3">Instax Camera</span>
+                </div>
+            </td>
+            <td>0</td>
+            <td>1.000.000 đ</td>
+            <td>100</td>
+            <td>
+                <button class="edit-btn"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="delete-btn"><i class="fa-regular fa-pen-to-square"></i></button>
+            </td>
+        </tr>
+        <!-- Thêm các sản phẩm khác ở đây -->
+    </tbody>
+</table>

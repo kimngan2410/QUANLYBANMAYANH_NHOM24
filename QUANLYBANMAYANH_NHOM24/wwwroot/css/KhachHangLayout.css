@@ -133,12 +133,6 @@ nav a {
         text-decoration: none;
     }
 
-/*icon người dùng*/
-.icon-user {
-    height: 30px;
-    width: 30px;
-    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
-}
 
 /* Đổi màu cho nút đăng nhập */
 .btn-custom {
@@ -147,10 +141,10 @@ nav a {
     border: none;
 }
 
-.btn-custom:hover {
-    background-color: #163840;
-    color: #fff;
-}
+    .btn-custom:hover {
+        background-color: #163840;
+        color: #fff;
+    }
 
 /* Đổi màu cho liên kết */
 .text-custom {
@@ -158,10 +152,10 @@ nav a {
     font-weight: bold;
 }
 
-.text-custom:hover {
-    color: #163840;
-    text-decoration: underline;
-}
+    .text-custom:hover {
+        color: #163840;
+        text-decoration: underline;
+    }
 
 /*đổi màu cho button đăng ký*/
 #RegisterForm .btn-primary {
@@ -169,23 +163,78 @@ nav a {
     border-color: #1E4752;
 }
 
-#RegisterForm .btn-primary:hover {
-    background-color: #163C46;
-    border-color: #163C46;
-}
+    #RegisterForm .btn-primary:hover {
+        background-color: #163C46;
+        border-color: #163C46;
+    }
 
-/*icon giỏ hàng*/
-.icon-cart {
-    height: 35px;
-    width: 35px;
+/*icon người dùng*/
+.icon-user {
+    height: 30px;
+    width: 30px;
     object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
 }
 
-.icon-heart {
-    height: 25px;
-    width: 25px;
-    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
-    margin-top: 5px;
+.cart {
+    position: relative;
+    display: inline-block;
+}
+
+    .cart .icon-cart {
+        width: 40px; /* Kích thước icon giỏ hàng */
+        height: 40px;
+        object-fit: cover;
+    }
+
+.cart-count {
+    color: white !important;
+    top: -4px !important;
+}
+
+.cart .cart-count {
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    min-width: 50%;
+    height: 55%;
+}
+
+.heart {
+    position: relative;
+    display: inline-block;
+}
+
+    .heart .icon-heart {
+        width: 25px; /* Kích thước icon giỏ hàng */
+        height: 25px;
+        object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+        margin-top: 5px;
+    }
+
+
+.heart-count {
+    color: white !important;
+    top: -4px !important;
+}
+
+.heart .heart-count {
+    position: absolute;
+    top: -7px;
+    right: -12px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    min-width: 50%;
+    height: 70%;
 }
 
 /*----Nav header------*/
@@ -300,6 +349,7 @@ nav a {
     color: #1E4752;
     margin-top: 10px;
 }
+
     .title_menu::after {
         content: '';
         display: block;

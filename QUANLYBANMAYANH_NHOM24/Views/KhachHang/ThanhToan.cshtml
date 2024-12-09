@@ -1,12 +1,18 @@
-﻿@{
+﻿@model IEnumerable<GioHangViewModel>
+
+@{
     ViewData["Title"] = "Thanh toán";
+}
+
+@{
+    Layout = "_KhachHangLayout";
 }
 
 <link rel="stylesheet" type="text/css" href="./../css/ThanhToan.css">
 
 
 <div class="breadcrumb">
-    <a href="/" class="home">Trang chủ</a>
+    <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
     <span class="dot">•</span>
     <a class="payment">Thanh toán</a>
 </div>
@@ -68,24 +74,19 @@
             <hr>
             <table>
                 <tbody>
-                    @{
-                        decimal grandTotal = 0; // Biến để lưu tổng tiền của tất cả sản phẩm
-                    }
                      @foreach (var item in Model)
                     {
-                        var itemTotal = item.Price * item.Quantity; // Tính tiền của từng sản phẩm
-                        grandTotal += itemTotal; // Cộng tiền của sản phẩm vào tổng tiền chung
                         <tr>
                             <td>
                                 <div class="img-thumbnail">
-                                    <img src="@item.ImageUrl" alt="@item.ProductName">
+                                    <img src="@Url.Content(@item.DiaChiAnh)" alt="@item.TenSanPham">
                                 </div>
                             </td>
                             <td>
                                 <div class="product-info">
-                                    <span class="name-product">@item.ProductName</span>
-                                    <span class="quantity-product">SL: @item.Quantity</span>
-                                    <span class="price-product">@String.Format("{0:0,0} ₫", item.Price * item.Quantity)</span>
+                                    <span class="name-product">@item.TenSanPham</span>
+                                    <span class="quantity-product">SL: @item.SoLuong</span>
+                                    <span class="price-product">@item.ThanhTien.ToString("C0")</span>
                                 </div>
                             </td>
                         </tr>
@@ -95,11 +96,11 @@
             <hr>
             <div class="provisional d-flex justify-content-between">
                 <p>Tạm tính</p>
-                <p>@String.Format("{0:0,0} ₫", grandTotal)</p>
+                <p>@ViewBag.TongThanhTien.ToString("C0")</p>
             </div>
             <div class="total d-flex justify-content-between fw-bold">
                 <p>Tổng</p>
-                <p>@String.Format("{0:0,0} ₫", grandTotal)</p>
+                <p>@ViewBag.TongThanhTien.ToString("C0")</p>
             </div>
              <button class="btn btn-primary w-100 mt-3" onclick="window.location.href='@Url.Action("DatHangThanhCong", "KhachHang")'">Thanh toán</button>
         </div>

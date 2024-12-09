@@ -7,6 +7,20 @@
     var sonyDanhMucCon = ViewBag.SonyDanhMucCon as List<QUANLYBANMAYANH_NHOM24.Models.DanhMucCon>;
 }
 
+@{
+    ViewData["Title"] = "Sản phẩm";
+}
+
+@{
+    Layout = "_KhachHangLayout";
+}
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <div class="container-fluid">
     <div class="row align-items-center">
         <!-- Carousel bên trái (8 phần) -->
@@ -66,8 +80,8 @@
                         <div class="card-body text-center">
                             <h6 class="card-title">@sp.Tensp</h6>
                             <p class="card-text text-danger">@sp.Gia.ToString("N0") đ</p>
-                            <button class="btn btn-primary">Chi tiết</button>
-                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(@sp.Idsanpham)">Thêm vào giỏ hàng</button>
+                    </div>
                     </div>
                 </div>
             }
@@ -95,14 +109,90 @@
             {
                 <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
                     <div class="card">
-                        <img src="@Url.Content(sp.DiachianhSp)" class="card-img-top" alt="@sp.Tensp">
+                        <img src="@Url.Content(sp.DiachianhSp)" class="card-img-top" alt="@sp.Tensp" style="width: 100px; height: 100px;">
                         <div class="card-body text-center">
                             <h6 class="card-title">@sp.Tensp</h6>
                             <p class="card-text text-danger">@sp.Gia.ToString("N0") đ</p>
-                            <button class="btn btn-primary">Chi tiết</button>
-                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(@sp.Idsanpham)">Thêm vào giỏ hàng</button>
+                    </div>
                     </div>
                 </div>
             }
         </div>
+
+    <!--INPUT IDNGUOI DUNG ẨN-->
+    <input type="hidden" id="hidden-user-id" value="@ViewBag.IdNguoiDung">
+
+
+
+
+        <!--Scipt-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function addToCart(idSanPham) {
+            const soLuong = 1; // Số lượng mặc định
+            $.ajax({
+                url: '/KhachHang/ThemVaoGioHang',
+                type: 'POST',
+                data: { idSanPham: idSanPham, soLuong: soLuong },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: 'Sản phẩm đã được thêm vào giỏ hàng.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                        $('#cart-count').text(response.cartCount); // Cập nhật số lượng giỏ hàng
+                    } else {
+                        // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+                        if (response.redirectUrl) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Thông báo',
+                                text: response.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = response.redirectUrl;
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: response.message
+                            });
+                        }
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.'
+                    });
+                }
+            });
+        }
+
+
+
+        // Gọi hàm này khi tải trang để cập nhật số lượng giỏ hàng
+        $(document).ready(function () {
+            $.ajax({
+                url: '/KhachHang/LaySoLuongGioHang', // Tạo API để lấy số lượng sản phẩm
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        $('#cart-count').text(response.cartCount);
+                    }
+                },
+                error: function () {
+                    console.error('Không thể lấy số lượng giỏ hàng.');
+                }
+            });
+        });
+    </script>
 </div>
