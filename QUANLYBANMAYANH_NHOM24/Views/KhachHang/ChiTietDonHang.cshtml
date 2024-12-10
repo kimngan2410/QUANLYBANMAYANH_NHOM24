@@ -1,4 +1,6 @@
-﻿@{
+﻿@model DonHangChiTietViewModel
+
+@{
     ViewData["Title"] = "Chi tiết đơn hàng";
 }
 
@@ -49,10 +51,10 @@
         </ul>
     </div>
     <div class="order-details-list col-md-6">
-        <h2>Đơn hàng 9951</h2>
+        <h2>Đơn hàng @Model.MaDonHang</h2>
         <p class="date-order mb-20">
             Ngày đặt hàng: 
-            <span class="date fw-7 c-third">07/12/2024</span>
+            <span class="date fw-7 c-third">@Model.NgayMua?.ToString("dd/MM/yyyy")</span>
         </p>
         <div class="order-list-items">
             <table class="table-order">
@@ -65,27 +67,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        decimal grandTotal = 0; // Biến để lưu tổng tiền của tất cả sản phẩm
-                    }
-                    @foreach (var item in Model)
+                    @foreach (var chiTiet in Model.ChiTietDonHangs)
                     {
-                        var itemTotal = item.Price * item.Quantity; // Tính tiền của từng sản phẩm
-                        grandTotal += itemTotal; // Cộng tiền của sản phẩm vào tổng tiền chung
                         <tr>
                             <td>
                                 <div class="order-info">
                                     <div class="img-thumbnail">
-                                        <img src="@item.ImageUrl" alt="@item.ProductName">
+                                        <img src="@chiTiet.HinhAnh" alt="@chiTiet.TenSanPham">
                                     </div>
-                                    <span class="ms-3">@item.ProductName</span>
+                                    <span class="ms-3">@chiTiet.TenSanPham</span>
                                 </div>
                             </td>
                             <td>
-                                <span>@String.Format("{0:0,0} ₫", item.Price)</span>
+                                <span>@chiTiet.DonGia.ToString("C0")</span>
                             </td>
-                            <td>x @item.Quantity</td>
-                            <td style="text-align: right;">@String.Format("{0:0,0} ₫", item.Price * item.Quantity)</td>
+                            <td>x @chiTiet.SoLuong</td>
+                            <td style="text-align: right;">@chiTiet.ThanhTien.ToString("C0")</td>
                         </tr>
                     }
                 </tbody>
@@ -100,13 +97,13 @@
                 </p>
                 <p>
                     Phương thức thanh toán:
-                    <span>Tiền mặt khi nhận hàng</span>
+                    <span>@Model.PhuongThucThanhToan</span>
                 </p>
             </div>
             <div class="order-details-total">
                 <p>
                     Tổng tiền:
-                    <span>@String.Format("{0:0,0} ₫", grandTotal)</span>
+                    <span>@Model.TongTien.ToString("C0")</span>
                 </p>
             </div>
         </div>

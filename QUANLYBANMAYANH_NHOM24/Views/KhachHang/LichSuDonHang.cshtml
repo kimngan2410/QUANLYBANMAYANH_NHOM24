@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<DonHangViewModel>
+
+@{
     ViewData["Title"] = "Lịch sử đơn hàng";
 }
 
@@ -56,40 +58,46 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
-            </div>            <table>
-                <thead>
-                    <tr>
-                        <th>Mã đơn hàng</th>
-                        <th>Ngày đặt hàng</th>
-                        <th>Tổng tiền</th>
-                        <th style="text-align: right;">Trạng thái</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="@Url.Action("ChiTietDonHang", "KhachHang")">9951</a>
-                         </td>
-                        <td>23/11/2024</td>
-                        <td>43.790.000 đ</td>
-                        <td class="status reserved">Tạm giữ</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#">9952</a>
-                        </td>
-                        <td>23/11/2024</td>
-                        <td>40.190.000 đ</td>
-                        <td class="status processing">Đang xử lý</td>
-                    </tr>
-                </tbody>
-            </table>
+            </div>           
+
+            @if (Model != null && Model.Any())
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã Đơn Hàng</th>
+                            <th>Ngày Mua</th>
+                            <th>Tổng Tiền</th>
+                            <th style="text-align: right;">Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var donHang in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("ChiTietDonHang", "KhachHang", new { id = donHang.MaDonHang })">@donHang.MaDonHang</a>
+                                </td>
+                                <td>@donHang.NgayMua?.ToString("dd/MM/yyyy")</td>
+                                <td>@donHang.TongTien.ToString("C0")</td>
+                                <td class="status reserved">@donHang.Trangthai</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>Không có đơn hàng nào!</p>
+            }
+
+
         </div>
             
     </div>
 
 
 
-    <!-------------  Scrip  t--------------->
+    <!-------------  Scrip t--------------->
 
 </div>

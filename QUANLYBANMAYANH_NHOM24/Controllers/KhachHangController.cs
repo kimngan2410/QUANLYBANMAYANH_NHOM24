@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using QUANLYBANMAYANH_NHOM24.Utilities;
+using Azure.Core;
 
 
 namespace QUANLYBANMAYANH_NHOM24.Controllers
@@ -110,6 +111,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 .Include(gh => gh.IdsanphamNavigation)
                 .Select(gh => new GioHangViewModel
                 {
+                    Idgiohang = gh.IdGioHang,
                     IdSanPham = gh.IdsanphamNavigation.Idsanpham,
                     TenSanPham = gh.IdsanphamNavigation.Tensp,
                     Gia = gh.IdsanphamNavigation.Gia,
@@ -133,11 +135,12 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             // Truyền dữ liệu xuống View, bao gồm giỏ hàng và tổng thành tiền
             ViewBag.TongThanhTien = tongThanhTien;
             ViewBag.TongSoLuong = tongSoLuong;
+            ViewBag.IdNguoiDung = idNguoiDung;  // Truyền IdNguoiDung qua ViewBag
 
             return View(gioHang);
         }
 
-       
+
 
 
         [HttpPost]
@@ -153,17 +156,22 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
                 // Kiểm tra xem người dùng đã đăng nhập hay chưa
                 int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
+                if (idNguoiDung == null)
+                {
+                    return Json(new { success = false, message = "Bạn cần đăng nhập để cập nhật giỏ hàng." });
+                }
+
+                // Tìm sản phẩm trong giỏ hàng
                 var gioHang = _context.GioHangs
-                    .Include(gh => gh.IdsanphamNavigation) // Bắt buộc phải nạp thông tin chi tiết sản phẩm
+                    .Include(gh => gh.IdsanphamNavigation) // Nạp thông tin sản phẩm
                     .FirstOrDefault(gh => gh.Idnguoidung == idNguoiDung && gh.Idsanpham == request.IdSanPham);
 
-                // Kiểm tra xem giỏ hàng có tồn tại không
                 if (gioHang == null)
                 {
                     return Json(new { success = false, message = "Sản phẩm không tồn tại trong giỏ hàng." });
                 }
 
-                // Kiểm tra IdsanphamNavigation có phải là null không
+                // Kiểm tra thông tin sản phẩm
                 if (gioHang.IdsanphamNavigation == null)
                 {
                     return Json(new
@@ -173,17 +181,17 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                     });
                 }
 
-
-                // Cập nhật số lượng
+                // Cập nhật số lượng sản phẩm
                 gioHang.Soluong += request.ThayDoi;
 
-                // Nếu số lượng <= 0 thì xóa sản phẩm khỏi giỏ hàng
                 if (gioHang.Soluong <= 0)
                 {
+                    // Nếu số lượng <= 0 thì xóa sản phẩm khỏi giỏ hàng
                     _context.GioHangs.Remove(gioHang);
                 }
                 else
                 {
+                    // Cập nhật lại giỏ hàng mà không tạo mới IdGioHang
                     _context.GioHangs.Update(gioHang);
                 }
 
@@ -206,12 +214,69 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             }
             catch (Exception ex)
             {
-                // In ra lỗi chi tiết để debug dễ dàng hơn
                 return Json(new { success = false, message = "Đã xảy ra lỗi: " + ex.Message });
             }
         }
 
-        
+
+
+
+        [HttpPost]
+        public IActionResult XoaSanPham(int idSanPham)
+        {
+            try
+            {
+                var idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
+
+                if (idNguoiDung == null)
+                {
+                    return Json(new { success = false, message = "Bạn cần đăng nhập để thực hiện thao tác này." });
+                }
+
+                // Tìm sản phẩm trong giỏ hàng của người dùng
+                var gioHang = _context.GioHangs
+                    .FirstOrDefault(gh => gh.Idnguoidung == idNguoiDung && gh.Idsanpham == idSanPham);
+
+                if (gioHang != null)
+                {
+                    _context.GioHangs.Remove(gioHang);
+                    _context.SaveChanges(); // Xóa sản phẩm khỏi cơ sở dữ liệu
+                }
+
+                // Cập nhật lại tổng số lượng và tổng tiền
+                var tongSoLuong = _context.GioHangs
+                    .Where(gh => gh.Idnguoidung == idNguoiDung)
+                    .Sum(gh => gh.Soluong);
+
+                var tongThanhTien = _context.GioHangs
+                    .Where(gh => gh.Idnguoidung == idNguoiDung)
+                    .Sum(gh => gh.Soluong * gh.IdsanphamNavigation.Gia);
+
+                // Kiểm tra nếu giỏ hàng trống và chuyển hướng
+                if (tongSoLuong == 0)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Giỏ hàng của bạn đã trống.",
+                        tongSoLuong = tongSoLuong,
+                        tongThanhTien = tongThanhTien
+                    });
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Sản phẩm đã được xóa khỏi giỏ hàng.",
+                    tongSoLuong = tongSoLuong,
+                    tongThanhTien = tongThanhTien
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Đã xảy ra lỗi: " + ex.Message });
+            }
+        }
 
 
 
@@ -220,21 +285,37 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
 
 
-        /*-----------------THANH TOÁN---------------*/
+
+
+
+
+
+
+
+
+
+
+        /*-------------------------------------THANH TOÁN-----------------------------------*/
+
+        [HttpGet]
         public IActionResult ThanhToan()
         {
-            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
+            var idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
 
+            if (idNguoiDung != null)
+            {
+                ViewBag.IdNguoiDung = idNguoiDung; // Truyền giá trị vào ViewBag
+            }
 
-            // Lấy danh sách giỏ hàng kiểu CartItem
+            // Lấy danh sách giỏ hàng
             var cartItems = _context.GioHangs
                 .Where(gh => gh.Idnguoidung == idNguoiDung)
                 .Include(gh => gh.IdsanphamNavigation)
                 .ToList();
 
-            // Chuyển đổi CartItem thành GioHangViewModel
             var gioHangViewModels = cartItems.Select(gh => new GioHangViewModel
             {
+                IdSanPham = gh.Idsanpham, // Lấy IdSanPham từ giỏ hàng
                 TenSanPham = gh.IdsanphamNavigation.Tensp,
                 Gia = gh.IdsanphamNavigation.Gia,
                 DiaChiAnh = gh.IdsanphamNavigation.DiachianhSp,
@@ -242,64 +323,231 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 ThanhTien = gh.Soluong * gh.IdsanphamNavigation.Gia
             }).ToList();
 
-            // Tính tổng thành tiền và số lượng sản phẩm
-            decimal tongThanhTien = gioHangViewModels.Sum(g => g.ThanhTien);
-            int tongSoLuong = gioHangViewModels.Sum(g => g.SoLuong);
+            // Lấy danh sách phương thức thanh toán
+            var phuongThucThanhToanList = _context.PhuongThucThanhToans.ToList();
 
+            // Tạo đối tượng ThanhToanViewModel
+            var viewModel = new ThanhToanViewModel
+            {
+                Name = "Tên người dùng", // Tạm thời
+                Phone = "0123456789",    // Tạm thời
+                Address = "Địa chỉ người dùng", // Tạm thời
+                Note = "Ghi chú",
+                PaymentMethodId = phuongThucThanhToanList.FirstOrDefault()?.IdPttt ?? 0,  // Lấy phương thức thanh toán mặc định
+                GioHang = gioHangViewModels, // Khởi tạo danh sách giỏ hàng
+                UserId = idNguoiDung ?? 0
+            };
 
             // Truyền dữ liệu xuống View
-            ViewBag.TongThanhTien = tongThanhTien;
-            ViewBag.TongSoLuong = tongSoLuong;
+            ViewBag.TongThanhTien = gioHangViewModels.Sum(g => g.ThanhTien);
+            ViewBag.TongSoLuong = gioHangViewModels.Sum(g => g.SoLuong);
 
-            return View(gioHangViewModels);
+            return View(viewModel);
         }
 
-        public IActionResult DatHangThanhCong()
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> ThanhToan(ThanhToanViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                // Nếu dữ liệu không hợp lệ, trả về lại form với lỗi
+                return View(model);
+            }
+
+         
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 1. Lưu địa chỉ giao hàng
+                var diaChi = new DiaChiGiaoHang
+                {
+                    Idnguoidung = model.UserId, // Lấy từ session hoặc user login
+                    Tennguoinhan = model.Name,
+                    Sdtnguoinhan = model.Phone,
+                    Diachi = model.Address
+                };
+                _context.DiaChiGiaoHangs.Add(diaChi);
+                await _context.SaveChangesAsync();
+
+                // 2. Lưu thông tin đơn hàng
+                var donHang = new DonHang
+                {
+                    Idnguoidung = model.UserId,
+                    Ngaydat = DateTime.Now,
+                    Iddiachi = diaChi.Iddiachi,
+                    IdPttt = model.PaymentMethodId, // Sử dụng giá trị phương thức thanh toán
+                    Trangthai = "Đang xử lý"
+                };
+                _context.DonHangs.Add(donHang);
+                await _context.SaveChangesAsync(); // Lưu đơn hàng để có Iddonhang
+
+                // 3. Lưu chi tiết đơn hàng và xóa sản phẩm khỏi giỏ hàng
+                var cartItems = _context.GioHangs
+                    .Where(gh => gh.Idnguoidung == model.UserId)
+                    .Include(gh => gh.IdsanphamNavigation)  // Bao gồm thông tin của sản phẩm
+                    .ToList();
+                foreach (var item in cartItems)
+                {
+                    // Thêm vào chi tiết đơn hàng
+                    var chiTietDonHang = new ChiTietDonHang
+                    {
+                        Iddonhang = donHang?.Iddonhang ?? 0, // Giá trị mặc định nếu donHang là null
+                        Idsanpham = item?.Idsanpham ?? 0, // Giá trị mặc định nếu item là null
+                        Soluong = item?.Soluong ?? 0, // Giá trị mặc định nếu item là null
+                        UnitPrice = item?.IdsanphamNavigation?.Gia ?? 0 // Giá từ bảng SanPham (IdsanphamNavigation)
+                    };
+
+                    _context.ChiTietDonHangs.Add(chiTietDonHang); // Thêm chi tiết đơn hàng
+
+                    // Xóa sản phẩm khỏi giỏ hàng
+                    _context.GioHangs.Remove(item);
+                }
+
+                await _context.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
+
+                // 4. Hoàn tất giao dịch
+                await transaction.CommitAsync();
+
+                TempData["SuccessMessage"] = "Thanh toán thành công!";
+                return RedirectToAction("DatHangThanhCong", new { idNguoiDung = donHang.Idnguoidung });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                ModelState.AddModelError(string.Empty, "Đã có lỗi xảy ra: " + ex.Message);
+                return View(model);
+            }
         }
+
+
+
+
+
+
+
+        public async Task<IActionResult> DatHangThanhCong(int idNguoiDung)
+        {
+            var donHang = await _context.DonHangs
+                .Where(dh => dh.Idnguoidung == idNguoiDung)
+                .OrderByDescending(dh => dh.Ngaydat)
+                .Select(dh => new
+                {
+                    dh.Iddonhang,
+                    dh.Ngaydat,
+                    TotalAmount = dh.ChiTietDonHangs.Sum(ct => ct.Soluong * ct.UnitPrice),
+                    PaymentMethod = dh.IdPtttNavigation.Tenphuongthuc
+                })
+                .FirstOrDefaultAsync();
+
+            // Truyền idNguoiDung vào ViewBag
+            ViewBag.IdNguoiDung = idNguoiDung;
+
+            if (donHang == null)
+            {
+                return NotFound("Không tìm thấy đơn hàng.");
+            }
+
+            // Tạo ViewModel hoặc trả dữ liệu sang View
+            var viewModel = new DonHangViewModel
+            {
+                MaDonHang = donHang.Iddonhang,
+                NgayMua = donHang.Ngaydat,
+                TongTien = donHang.TotalAmount,
+                PhuongThucThanhToan = donHang.PaymentMethod
+            };
+
+            return View(viewModel);
+        }
+
+
+
 
         public IActionResult CapNhatThongTin()
         {
             return View();
         }
 
-        public IActionResult LichSuDonHang()
+
+
+
+
+        /*--------------------------ĐƠN HÀNG--------------------------------*/
+
+        public async Task<IActionResult> LichSuDonHang()
         {
-            return View();
+            // Lấy idNguoiDung từ Session
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
+
+
+            // Truy vấn danh sách đơn hàng
+            var donHangs = await _context.DonHangs
+                .Include(dh => dh.ChiTietDonHangs)
+                .Where(dh => dh.Idnguoidung == idNguoiDung.Value)
+                .OrderByDescending(dh => dh.Ngaydat)
+                .Select(dh => new DonHangViewModel
+                {
+                    MaDonHang = dh.Iddonhang,
+                    NgayMua = dh.Ngaydat,
+                    TongTien = dh.ChiTietDonHangs.Sum(ct => ct.Soluong * ct.UnitPrice),
+                    Trangthai = dh.Trangthai
+                })
+                .ToListAsync();
+
+            Console.WriteLine($"Số đơn hàng: {donHangs.Count}");
+
+            return View(donHangs);
         }
 
-        public IActionResult ChiTietDonHang()
+
+
+
+        public async Task<IActionResult> ChiTietDonHang(int id)
         {
-            var cartItems = new List<CartItem>
+            // Lấy idNguoiDung từ Session
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
+
+            if (idNguoiDung == null)
             {
-                new CartItem
-                {
-                    ProductName = "Canon EOS 7D Mark II",
-                    Price = 42800000,
-                    Quantity = 1,
-                    ImageUrl = "./../images/canon_camera.png"
-                },
-                new CartItem
-                {
-                    ProductName = "Fujifilm Instax Mini 11 (Ice White)",
-                    Price = 990000,
-                    Quantity = 1,
-                    ImageUrl = "./../images/instax_camera.png"
-                },
+                return Json(new { success = false, message = "Bạn cần đăng nhập để thực hiện thao tác này." });
+            }
 
-                new CartItem
+            // Truy vấn chi tiết đơn hàng
+            var donHang = await _context.DonHangs
+                .Include(dh => dh.ChiTietDonHangs)
+                .ThenInclude(ct => ct.IdsanphamNavigation) // Lấy thông tin sản phẩm
+                .Include(dh => dh.IdPtttNavigation) // Lấy phương thức thanh toán
+                .Where(dh => dh.Iddonhang == id && dh.Idnguoidung == idNguoiDung.Value)
+                .Select(dh => new DonHangChiTietViewModel
                 {
-                    ProductName = "Fujifilm Instax Mini 11 (Ice White)",
-                    Price = 990000,
-                    Quantity = 2,
-                    ImageUrl = "./../images/instax_camera.png"
-                }
+                    MaDonHang = dh.Iddonhang,
+                    NgayMua = dh.Ngaydat,
+                    Trangthai = dh.Trangthai,
+                    PhuongThucThanhToan = dh.IdPtttNavigation.Tenphuongthuc,
+                    TongTien = dh.ChiTietDonHangs.Sum(ct => ct.Soluong * ct.UnitPrice),
+                    ChiTietDonHangs = dh.ChiTietDonHangs.Select(ct => new ChiTietDonHangViewModel
+                    {
+                        TenSanPham = ct.IdsanphamNavigation.Tensp,
+                        HinhAnh = ct.IdsanphamNavigation.DiachianhSp,
+                        DonGia = ct.UnitPrice,
+                        SoLuong = ct.Soluong,
+                        ThanhTien = ct.Soluong * ct.UnitPrice
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
 
+            if (donHang == null)
+            {
+                return NotFound();
+            }
 
-            };
-            return View(cartItems);
+            return View(donHang);
         }
+
 
         public IActionResult DiaChiNhanHang()
         {
@@ -317,13 +565,13 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         }
     }
 
-    public class CartItem
-    {
-        public string ProductName { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
-        public string ImageUrl { get; set; }
-    }
+
+
+
+
+
+
+    /*-------------------------------- CÁC REQUEST ----------------------------------*/
 
     public class CapNhatSoLuongRequest
     {
@@ -331,7 +579,15 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
         public int ThayDoi { get; set; } // +1 hoặc -1
     }
 
-  
+
+    public class CheckoutRequest
+    {
+        public string HoTen { get; set; }
+        public string SoDienThoai { get; set; }
+        public string DiaChi { get; set; }
+        public int PhuongThucThanhToan { get; set; } // ID phương thức thanh toán
+        public List<GioHangViewModel> SanPhamDaMua { get; set; }
+    }
 
 
 }

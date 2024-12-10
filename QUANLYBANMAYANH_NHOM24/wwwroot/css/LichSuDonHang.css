@@ -12,6 +12,12 @@
     font-family: 'quicksand-semibold';
     src: url('../fonts/quicksand-semibold.ttf') format('truetype');
 }
+
+
+@font-face {
+    font-family: 'quicksand-medium';
+    src: url('../fonts/Quicksand-Medium.ttf') format('truetype');
+}
 /*------- Thanh điều hướng ---------*/
 .breadcrumb {
     font-family: 'quicksand-semibold', sans-serif;
@@ -219,10 +225,13 @@ th, td {
 
 th {
    color: #1E4752;
+   font-size: 16px;
 }
 
 td {
     border-top: 1px solid #D5D5D5;
+    font-size: 14px;
+    font-family: quicksand-medium, sans-serif;
 }
 
 td a{

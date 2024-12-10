@@ -41,7 +41,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
+                            <tr id="gioHang_@item.IdSanPham">
                                 <td>
                                     <div class="product-info d-flex align-items-flex-start">
                                         <div class="img-thumbnail">
@@ -60,7 +60,7 @@
                                 </td>
                                 <td>@item.ThanhTien.ToString("C0")</td>
                                 <td style="text-align: right;">
-                                    <button class="btn">
+                                    <button class="btn" onclick="xoaSanPham(@item.IdSanPham)">
                                         <i class="fa-regular fa-trash-can"></i>
                                     </button>
                                 </td>
@@ -131,4 +131,48 @@
             })
             .catch(error => console.error('Có lỗi xảy ra:', error));
     }
+
+    function xoaSanPham(idSanPham) {
+        const url = '/KhachHang/XoaSanPham'; // Endpoint API trong Controller
+        const data = {
+            idSanPham: idSanPham
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest' // Đánh dấu là request AJAX
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Xóa sản phẩm khỏi giỏ hàng trong HTML
+                    const productRow = document.getElementById(`gioHang_${idSanPham}`);
+                    if (productRow) {
+                        productRow.remove(); // Loại bỏ dòng sản phẩm khỏi giỏ hàng
+                    }
+
+                    // Cập nhật tổng số lượng và tổng tiền sau khi xóa sản phẩm
+                    const tongSoLuong = document.querySelector('.quantity');
+                    const tongThanhTien = document.querySelector('.total-value');
+
+                    if (tongSoLuong && tongThanhTien) {
+                        tongSoLuong.textContent = result.tongSoLuong; // Cập nhật tổng số lượng
+                        tongThanhTien.textContent = result.tongThanhTien.toLocaleString('vi-VN') + ' đ'; // Cập nhật tổng tiền
+                    }
+
+                    alert(result.message); // Hiển thị thông báo thành công
+                } else {
+                    alert(result.message); // Hiển thị thông báo lỗi nếu có
+                }
+            })
+            .catch(error => console.error('Có lỗi xảy ra:', error));
+    }
+
+
+
+
 </script>
