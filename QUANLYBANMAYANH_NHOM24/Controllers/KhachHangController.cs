@@ -326,12 +326,16 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             // Lấy danh sách phương thức thanh toán
             var phuongThucThanhToanList = _context.PhuongThucThanhToans.ToList();
 
+            // Kiểm tra xem người dùng đã có địa chỉ giao hàng chưa
+            var diaChiGiaoHang = _context.DiaChiGiaoHangs
+                .FirstOrDefault(d => d.Idnguoidung == idNguoiDung);
+
             // Tạo đối tượng ThanhToanViewModel
             var viewModel = new ThanhToanViewModel
             {
-                Name = "Tên người dùng", // Tạm thời
-                Phone = "0123456789",    // Tạm thời
-                Address = "Địa chỉ người dùng", // Tạm thời
+                Name = diaChiGiaoHang?.Tennguoinhan ?? "", // Nếu đã có địa chỉ, điền tên người nhận
+                Phone = diaChiGiaoHang?.Sdtnguoinhan ?? "", // Nếu đã có địa chỉ, điền số điện thoại
+                Address = diaChiGiaoHang?.Diachi ?? "", // Nếu đã có địa chỉ, điền địa chỉ
                 Note = "Ghi chú",
                 PaymentMethodId = phuongThucThanhToanList.FirstOrDefault()?.IdPttt ?? 0,  // Lấy phương thức thanh toán mặc định
                 GioHang = gioHangViewModels, // Khởi tạo danh sách giỏ hàng
@@ -349,6 +353,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
 
 
+
         [HttpPost]
         public async Task<IActionResult> ThanhToan(ThanhToanViewModel model)
         {
@@ -358,48 +363,61 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 return View(model);
             }
 
-         
-
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Lưu địa chỉ giao hàng
-                var diaChi = new DiaChiGiaoHang
-                {
-                    Idnguoidung = model.UserId, // Lấy từ session hoặc user login
-                    Tennguoinhan = model.Name,
-                    Sdtnguoinhan = model.Phone,
-                    Diachi = model.Address
-                };
-                _context.DiaChiGiaoHangs.Add(diaChi);
-                await _context.SaveChangesAsync();
+                DiaChiGiaoHang diaChi;
 
-                // 2. Lưu thông tin đơn hàng
+                // Kiểm tra xem người dùng có địa chỉ giao hàng chưa
+                var existingDiaChi = _context.DiaChiGiaoHangs
+                    .FirstOrDefault(d => d.Idnguoidung == model.UserId);
+
+                if (existingDiaChi != null)
+                {
+                    // Nếu đã có địa chỉ, chỉ cần sử dụng địa chỉ đã có
+                    diaChi = existingDiaChi;
+                }
+                else
+                {
+                    // Nếu chưa có địa chỉ, tạo mới địa chỉ giao hàng
+                    diaChi = new DiaChiGiaoHang
+                    {
+                        Idnguoidung = model.UserId,
+                        Tennguoinhan = model.Name,
+                        Sdtnguoinhan = model.Phone,
+                        Diachi = model.Address
+                    };
+
+                    _context.DiaChiGiaoHangs.Add(diaChi);
+                    await _context.SaveChangesAsync();
+                }
+
+                // Lưu thông tin đơn hàng
                 var donHang = new DonHang
                 {
                     Idnguoidung = model.UserId,
                     Ngaydat = DateTime.Now,
                     Iddiachi = diaChi.Iddiachi,
-                    IdPttt = model.PaymentMethodId, // Sử dụng giá trị phương thức thanh toán
+                    IdPttt = model.PaymentMethodId,
                     Trangthai = "Đang xử lý"
                 };
                 _context.DonHangs.Add(donHang);
                 await _context.SaveChangesAsync(); // Lưu đơn hàng để có Iddonhang
 
-                // 3. Lưu chi tiết đơn hàng và xóa sản phẩm khỏi giỏ hàng
+                // Lưu chi tiết đơn hàng và xóa sản phẩm khỏi giỏ hàng
                 var cartItems = _context.GioHangs
                     .Where(gh => gh.Idnguoidung == model.UserId)
-                    .Include(gh => gh.IdsanphamNavigation)  // Bao gồm thông tin của sản phẩm
+                    .Include(gh => gh.IdsanphamNavigation)
                     .ToList();
+
                 foreach (var item in cartItems)
                 {
-                    // Thêm vào chi tiết đơn hàng
                     var chiTietDonHang = new ChiTietDonHang
                     {
-                        Iddonhang = donHang?.Iddonhang ?? 0, // Giá trị mặc định nếu donHang là null
-                        Idsanpham = item?.Idsanpham ?? 0, // Giá trị mặc định nếu item là null
-                        Soluong = item?.Soluong ?? 0, // Giá trị mặc định nếu item là null
-                        UnitPrice = item?.IdsanphamNavigation?.Gia ?? 0 // Giá từ bảng SanPham (IdsanphamNavigation)
+                        Iddonhang = donHang.Iddonhang,
+                        Idsanpham = item.Idsanpham,
+                        Soluong = item.Soluong,
+                        UnitPrice = item.IdsanphamNavigation.Gia
                     };
 
                     _context.ChiTietDonHangs.Add(chiTietDonHang); // Thêm chi tiết đơn hàng
@@ -408,9 +426,9 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                     _context.GioHangs.Remove(item);
                 }
 
-                await _context.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
+                await _context.SaveChangesAsync();
 
-                // 4. Hoàn tất giao dịch
+                // Hoàn tất giao dịch
                 await transaction.CommitAsync();
 
                 TempData["SuccessMessage"] = "Thanh toán thành công!";

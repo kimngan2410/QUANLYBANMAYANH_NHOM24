@@ -23,20 +23,20 @@
         <div class="payment-address col-md-6">
             <h4>Địa chỉ thanh toán</h4>
             <form id="formThanhToan" asp-action="ThanhToan" asp-controller="KhachHang" method="post">
-               <input type="hidden" name="UserId" value="@ViewBag.IdNguoiDung" />
+                <input type="hidden" name="UserId" value="@ViewBag.IdNguoiDung" />
                 <input type="hidden" name="PaymentMethodId" value="1">
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Nhập họ và tên" required>
+                    <input type="text" class="form-control" value="@Model.Name" id="name" name="name" placeholder="Nhập họ và tên" required>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
+                    <input type="text" class="form-control" value="@Model.Phone" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ">
+                    <input type="text" class="form-control" value="@Model.Address" id="address" name="address" placeholder="Nhập địa chỉ">
                 </div>
                 <div class="mb-3">
                     <label for="note" class="form-label">Ghi chú đơn hàng</label>
@@ -45,22 +45,22 @@
                 <div class="methoth-payment">
                     <h4>Phương thức thanh toán</h4>
                     <div class="radio-group">
-                            <label class="radio-option">
+                        <label class="radio-option">
                             <input type="radio" name="payment" id="PaymentMethodId" value="1">
-                                <div class="icon">
-                                    <img src="./../images/chuyenkhoan.png" alt="">
+                            <div class="icon">
+                                <img src="./../images/chuyenkhoan.png" alt="">
                                 <span>Chuyển khoản ngân hàng</span>
-                                </div>
-                            </label>
+                            </div>
+                        </label>
 
-                        
-                            <label class="radio-option">
-                            <input type="radio" name="payment" id="PaymentMethodId"  value="2" )>
-                                <div class="icon">
-                                    <img src="./../images/tienmat.png" alt="">
-                                    <span>Trả tiền mặt khi thanh toán</span>
-                                </div>
-                            </label>
+
+                        <label class="radio-option">
+                            <input type="radio" name="payment" id="PaymentMethodId" value="2" )>
+                            <div class="icon">
+                                <img src="./../images/tienmat.png" alt="">
+                                <span>Trả tiền mặt khi thanh toán</span>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </form>
@@ -120,23 +120,22 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function submitCheckout() {
-    // Lấy giá trị từ các trường trong form
-    var name = document.getElementById('name').value;
-    var phone = document.getElementById('phone').value;
-    var paymentMethod = document.querySelector('input[name="payment"]:checked');
+        // Lấy giá trị từ các trường trong form
+        var name = document.getElementById('name').value;
+        var phone = document.getElementById('phone').value;
+        var paymentMethod = document.querySelector('input[name="payment"]:checked');
 
-    // Kiểm tra các trường bắt buộc
-    if (!name || !phone || !paymentMethod) {
-        alert("Vui lòng điền đầy đủ thông tin (Họ và tên, Số điện thoại, và Phương thức thanh toán).");
-        return false;
+        // Kiểm tra các trường bắt buộc
+        if (!name || !phone || !paymentMethod) {
+            alert("Vui lòng điền đầy đủ thông tin (Họ và tên, Số điện thoại, và Phương thức thanh toán).");
+            return false;
+        }
+
+        // Gửi giá trị của phương thức thanh toán vào form hidden để gửi đến backend
+        document.getElementById("PaymentMethodId").value = paymentMethod.value;
+
+        // Nếu tất cả các trường hợp lệ, gửi form
+        $('#formThanhToan').submit();
     }
 
-    // Gửi giá trị của phương thức thanh toán vào form hidden để gửi đến backend
-    document.getElementById("PaymentMethodId").value = paymentMethod.value;
-
-    // Nếu tất cả các trường hợp lệ, gửi form
-    $('#formThanhToan').submit();
-}
-
 </script>
-
