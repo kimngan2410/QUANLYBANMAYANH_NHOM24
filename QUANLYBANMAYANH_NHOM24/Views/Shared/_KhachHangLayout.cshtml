@@ -32,15 +32,14 @@
                 </form>
             </div>
             <div class="user-actions">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#LoginMenu">
-                    <img class="icon-user" src="@Url.Content("~/images/user.png")" alt="Icon User">
-                </a>
+                <div class="user-action">
+            
+                </div>
                 <a href="@Url.Action("GioHang_2", "KhachHang")">
                     <div class="cart">
                         <img class="icon-cart" src="@Url.Content("~/images/shopping-cart.png")" alt="Icon Cart">
                         <span class="cart-count" id="cart-count">@ViewBag.TongSoLuong</span> <!-- Số lượng sẽ thay đổi động -->
                     </div>
-
                 </a>
                 <a href="#">
                     <div class="heart">
