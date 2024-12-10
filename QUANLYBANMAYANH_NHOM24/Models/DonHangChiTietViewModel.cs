@@ -3,7 +3,7 @@
     public class DonHangChiTietViewModel
     {
         public int MaDonHang { get; set; }
-        public DateTime? NgayMua { get; set; }
+        public string NgayMua { get; set; }
         public string Trangthai { get; set; }
         public decimal TongTien { get; set; }
         public string PhuongThucThanhToan { get; set; }

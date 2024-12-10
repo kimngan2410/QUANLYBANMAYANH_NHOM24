@@ -1,4 +1,6 @@
-﻿@model IEnumerable<DonHangViewModel>
+﻿@model IEnumerable<QUANLYBANMAYANH_NHOM24.Models.DonHangViewModel>
+
+
 
 @{
     ViewData["Title"] = "Lịch sử đơn hàng";
@@ -8,9 +10,9 @@
 
 
 <div class="breadcrumb">
-    <a href="/" class="home">Trang chủ</a>
+    <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
     <span class="dot">•</span>
-    <a class="account">Tài khoản</a>
+    <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="account">Tài khoản</a>
     <span class="dot">•</span>
     <a class="order-history">Lịch sử đơn hàng</a>
 </div>
@@ -52,12 +54,13 @@
         <h2>Lịch sử đơn hàng</h2>
         <div class="order-list-items">
             <div class="order-search-box">
-                <form action="/search" method="GET">
-                    <input type="text" name="query" placeholder="Tìm kiếm" />
+                <form action="@Url.Action("LichSuDonHang", "KhachHang")" method="GET">
+                    <input type="text" name="query" placeholder="Nhập mã đơn hàng hoặc ngày đăt" />
                     <button type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
+
             </div>           
 
             @if (Model != null && Model.Any())
@@ -78,7 +81,7 @@
                                 <td>
                                     <a href="@Url.Action("ChiTietDonHang", "KhachHang", new { id = donHang.MaDonHang })">@donHang.MaDonHang</a>
                                 </td>
-                                <td>@donHang.NgayMua?.ToString("dd/MM/yyyy")</td>
+                                <td>@(DateTime.TryParse(donHang.NgayMua, out DateTime ngayMua) ? ngayMua.ToString("dd/MM/yyyy") : "Không xác định")</td>
                                 <td>@donHang.TongTien.ToString("C0")</td>
                                 <td class="status reserved">@donHang.Trangthai</td>
                             </tr>
@@ -99,5 +102,16 @@
 
 
     <!-------------  Scrip t--------------->
-
 </div>
+
+
+<script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        const query = document.querySelector("input[name='query']").value.trim();
+        if (query === "") {
+            e.preventDefault();
+            alert("Vui lòng nhập thông tin tìm kiếm!");
+        }
+    });
+
+</script>

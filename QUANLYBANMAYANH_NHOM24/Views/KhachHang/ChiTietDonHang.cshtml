@@ -4,113 +4,125 @@
     ViewData["Title"] = "Chi tiết đơn hàng";
 }
 
-<link rel="stylesheet" type="text/css" href="./../css/ChiTietDonHang.css">
 
-
-<div class="breadcrumb">
-    <a href="/" class="home">Trang chủ</a>
-    <span class="dot">•</span>
-    <a class="account">Tài khoản</a>
-    <span class="dot">•</span>
-    <a class="order-history">Lịch sử đơn hàng</a>
-    <span class="dot">•</span>
-    <a class="order-details">Đơn hàng 9951</a>
-</div>
-
-<div class="profile-container mt-5">
-    <div class="sidebar col-md-6">
-        <div class="avtar-name-user">
-            <img src="./../images/user_avatar.png" />
-            <h2>Nguyễn Văn A</h2>
-        </div>
-        <ul>
-            <li class="acc-menu-items">
-                <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="user">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <span>Thông tin cá nhân</span>
-                </a>
-            </li>
-            <li class="acc-menu-items">
-                <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order">
-                    <i class="fa-solid fa-clipboard"></i>
-                    <span>Đơn hàng</span>
-                </a>
-            </li>
-            <li class="acc-menu-items">
-                <a href="@Url.Action("DiaChiNhanHang", "KhachHang")" class="address">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>Địa chỉ giao hàng</span>
-                </a>
-            </li>
-            <li class="acc-menu-items">
-                <a href="@Url.Action("DoiMatKhau", "KhachHang")" class="change-pass">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>Đổi mật khẩu</span>
-                </a>
-            </li>
-        </ul>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng</title>
+    <link rel="stylesheet" type="text/css" href="~/css/ChiTietDonHang.css">
+</head>
+<body>
+    <!-- Nội dung trang web của bạn ở đây -->
+    <div class="breadcrumb">
+        <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
+        <span class="dot">•</span>
+        <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="account">Tài khoản</a>
+        <span class="dot">•</span>
+        <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order-history">Lịch sử đơn hàng</a>
+        <span class="dot">•</span>
+        <a class="order-details">Đơn hàng @Model.MaDonHang</a>
     </div>
-    <div class="order-details-list col-md-6">
-        <h2>Đơn hàng @Model.MaDonHang</h2>
-        <p class="date-order mb-20">
-            Ngày đặt hàng: 
-            <span class="date fw-7 c-third">@Model.NgayMua?.ToString("dd/MM/yyyy")</span>
-        </p>
-        <div class="order-list-items">
-            <table class="table-order">
-                <thead>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Đơn giá</th>
-                        <th>Số lượng</th>
-                        <th style="text-align: right;">Thành tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var chiTiet in Model.ChiTietDonHangs)
-                    {
+
+    <div class="profile-container mt-5">
+        <div class="sidebar col-md-6">
+            <div class="avtar-name-user">
+                <img src="~/images/user_avatar.png" />
+                <h2>Nguyễn Văn A</h2>
+            </div>
+            <ul>
+                <li class="acc-menu-items">
+                    <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="user">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span>Thông tin cá nhân</span>
+                    </a>
+                </li>
+                <li class="acc-menu-items">
+                    <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order">
+                        <i class="fa-solid fa-clipboard"></i>
+                        <span>Đơn hàng</span>
+                    </a>
+                </li>
+                <li class="acc-menu-items">
+                    <a href="@Url.Action("DiaChiNhanHang", "KhachHang")" class="address">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Địa chỉ giao hàng</span>
+                    </a>
+                </li>
+                <li class="acc-menu-items">
+                    <a href="@Url.Action("DoiMatKhau", "KhachHang")" class="change-pass">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Đổi mật khẩu</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="order-details-list col-md-6">
+            <h2>Đơn hàng @Model.MaDonHang</h2>
+            <p class="date-order mb-20">
+                Ngày đặt hàng: 
+                <span class="date fw-7 c-third">@(DateTime.TryParse(Model.NgayMua, out DateTime ngayMua) ? ngayMua.ToString("dd/MM/yyyy") : "Không xác định")</span>
+            </p>
+            <div class="order-list-items">
+                <table class="table-order">
+                    <thead>
                         <tr>
-                            <td>
-                                <div class="order-info">
-                                    <div class="img-thumbnail">
-                                        <img src="@chiTiet.HinhAnh" alt="@chiTiet.TenSanPham">
-                                    </div>
-                                    <span class="ms-3">@chiTiet.TenSanPham</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span>@chiTiet.DonGia.ToString("C0")</span>
-                            </td>
-                            <td>x @chiTiet.SoLuong</td>
-                            <td style="text-align: right;">@chiTiet.ThanhTien.ToString("C0")</td>
+                            <th>Sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th style="text-align: right;">Thành tiền</th>
                         </tr>
-                    }
-                </tbody>
-            </table>           
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var chiTiet in Model.ChiTietDonHangs)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="order-info">
+                                        <div class="img-thumbnail">
+                                            <img src="@Url.Content(chiTiet.HinhAnh)" alt="@chiTiet.TenSanPham">
+                                        </div>
+                                        <span class="ms-3">@chiTiet.TenSanPham</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span>@chiTiet.DonGia.ToString("C0")</span>
+                                </td>
+                                <td>x @chiTiet.SoLuong</td>
+                                <td style="text-align: right;">@chiTiet.ThanhTien.ToString("C0")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>           
+            </div>
             
-        <div class="info-details">
-            <div class="order-methoth-status">
-                <p>
-                    Tình trạng đơn hàng:
-                    <span>Tạm giữ</span>
-                </p>
-                <p>
-                    Phương thức thanh toán:
-                    <span>@Model.PhuongThucThanhToan</span>
-                </p>
-            </div>
-            <div class="order-details-total">
-                <p>
-                    Tổng tiền:
-                    <span>@Model.TongTien.ToString("C0")</span>
-                </p>
+            <div class="info-details">
+                <div class="order-methoth-status">
+                    <p>
+                        Tình trạng đơn hàng:
+                        <span>Tạm giữ</span>
+                    </p>
+                    <p>
+                        Phương thức thanh toán:
+                        <span>@Model.PhuongThucThanhToan</span>
+                    </p>
+                </div>
+                <div class="order-details-total">
+                    <p>
+                        Tổng tiền:
+                        <span>@Model.TongTien.ToString("C")</span>
+                    </p>
+                </div>
             </div>
         </div>
+
+
+
+        <!-------------  Scrip  t--------------->
+
     </div>
+</body>
+</html>
 
 
-
-    <!-------------  Scrip  t--------------->
-
-</div>

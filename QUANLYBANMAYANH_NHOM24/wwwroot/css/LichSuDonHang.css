@@ -225,12 +225,12 @@ th, td {
 
 th {
    color: #1E4752;
-   font-size: 16px;
+   font-size: 18px;
 }
 
 td {
     border-top: 1px solid #D5D5D5;
-    font-size: 14px;
+    font-size: 16px;
     font-family: quicksand-medium, sans-serif;
 }
 
