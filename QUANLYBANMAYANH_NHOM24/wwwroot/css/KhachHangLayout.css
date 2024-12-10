@@ -124,15 +124,47 @@ nav a {
 
 .user-actions {
     display: flex;
-    align-items: center;
+    align-items: center; /* Đảm bảo các icon căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa các icon */
 }
 
-    .user-actions a {
-        color: #fff;
-        margin-left: 15px;
-        text-decoration: none;
-    }
+.dropdown-menu {
+    display: none; /* Ẩn mặc định */
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Hiệu ứng mượt */
+}
 
+.dropdown-menu.show {
+    display: block; /* Hiển thị khi có class 'show' */
+    opacity: 1;
+    transform: translateY(0); /* Xóa hiệu ứng trễ */
+}
+
+
+.dropdown-item {
+    color: #000 !important; /* Màu đen */
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: #000 !important; /* Màu đen khi hover hoặc focus */
+    background-color: #f8f9fa !important; /* Màu nền nhạt hơn khi hover (tùy chọn) */
+}
+
+
+
+
+.icon-user {
+    height: 30px;
+    width: 30px;
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+    vertical-align: middle; /* Giữ hình ảnh căn giữa theo chiều dọc */
+}
 
 /* Đổi màu cho nút đăng nhập */
 .btn-custom {
