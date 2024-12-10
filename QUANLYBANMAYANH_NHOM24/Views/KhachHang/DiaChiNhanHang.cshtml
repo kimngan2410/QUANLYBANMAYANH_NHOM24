@@ -1,4 +1,6 @@
-﻿@{
+﻿@model QUANLYBANMAYANH_NHOM24.Models.DiaChiGiaoHang
+
+@{
     ViewData["Title"] = "Địa Chỉ nhận hàng";
 }
 
@@ -6,9 +8,9 @@
 
 
 <div class="breadcrumb">
-    <a href="/" class="home">Trang chủ</a>
+     <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
     <span class="dot">•</span>
-    <a class="account">Tài khoản</a>
+     <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="account">Tài khoản</a>
     <span class="dot">•</span>
     <a class="address">Địa chỉ nhận hàng</a>
 </div>
@@ -47,20 +49,20 @@
         </ul>
     </div>
     <div class="delivery-address col-md-6">
-        <h2>Thông tin cá nhân</h2>
+        <h2>Địa chỉ giao hàng</h2>
         <div class="address-info">
             <form method="post">
                 <div class="form-group">
                     <label for="fullName">Họ và tên</label>
-                    <input type="text" id="fullName" name="fullName" value="Lê Thị Kim Ngân" required>
+                    <input type="text" id="fullName" name="fullName" value="@Model.Tennguoinhan" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">Số điện thoại</label>
-                    <input type="text" id="phone" name="phone" value="0123456789" required>
+                    <input type="text" id="phone" name="phone" value="@Model.Sdtnguoinhan" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Địa chỉ</label>
-                    <input class="addres-details" type="text" id="address" name="address" value="Tổ 2 thôn Phước Thái, xã Hoà Nhơn, huyện Hoà Vang, Tp.Đà Nẵng" required>
+                    <input class="addres-details" type="text" id="address" name="address" value="@Model.Diachi" required>
                 </div>
             </form>
             <div class="form-group">

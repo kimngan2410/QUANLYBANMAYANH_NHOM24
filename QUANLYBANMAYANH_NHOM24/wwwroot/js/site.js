@@ -16,7 +16,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="/KhachHang/CapNhatThongTin">Tài khoản của tôi</a></li>
-                    <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                    <li><a class="dropdown-item" href="/KhachHang/LichSuDonHang">Đơn hàng</a></li>
                     <li><a class="dropdown-item text-danger" href="/Login/DangXuat">Đăng xuất</a></li>
                 </ul>
             </div>

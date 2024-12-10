@@ -28,15 +28,15 @@
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Nhập họ và tên" required>
+                    <input type="text" class="form-control" value="@Model.Name"  id="name" name="name" placeholder="Nhập họ và tên" required>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
+                    <input type="text" class="form-control" value="@Model.Phone" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ">
+                    <input type="text" class="form-control" value="@Model.Address" id="address" name="address" placeholder="Nhập địa chỉ">
                 </div>
                 <div class="mb-3">
                     <label for="note" class="form-label">Ghi chú đơn hàng</label>

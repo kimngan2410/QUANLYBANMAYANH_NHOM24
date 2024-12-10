@@ -1,4 +1,4 @@
-﻿@font-face {
+﻿﻿@font-face {
     font-family: 'quicksand-regular';
     src: url('../fonts/quicksand-regular.ttf') format('truetype');
 }
@@ -181,7 +181,7 @@
 
     .date-order span {
         font-size: 18px;
-        color:#1E4752;
+        color: #1E4752;
         font-family: quicksand-bold;
     }
 
@@ -204,13 +204,13 @@ th, td {
     border-bottom: 1px solid #D5D5D5;
 }
 
-.order-info{
+.order-info {
     display: flex;
 }
 
-.order-info span{
-    font-family: quicksand-semibold, sans-serif;
-}
+    .order-info span {
+        font-family: quicksand-semibold, sans-serif;
+    }
 
 .img-thumbnail {
     width: 70px;
@@ -220,7 +220,6 @@ th, td {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
     .img-thumbnail img {
@@ -245,10 +244,9 @@ th, td {
 
 .info-details span {
     color: #1E4752;
+    font-family: quicksand-bold, sans-serif;
 }
 
-.order-details-total span{
+.order-details-total span {
     font-size: 24px;
 }
-
-

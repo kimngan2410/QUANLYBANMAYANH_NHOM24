@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using QUANLYBANMAYANH_NHOM24.Utilities;
 using Azure.Core;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace QUANLYBANMAYANH_NHOM24.Controllers
@@ -326,12 +327,16 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             // Lấy danh sách phương thức thanh toán
             var phuongThucThanhToanList = _context.PhuongThucThanhToans.ToList();
 
+            // Kiểm tra xem người dùng đã có địa chỉ giao hàng chưa
+            var diaChiGiaoHang = _context.DiaChiGiaoHangs
+                .FirstOrDefault(d => d.Idnguoidung == idNguoiDung);
+
             // Tạo đối tượng ThanhToanViewModel
             var viewModel = new ThanhToanViewModel
             {
-                Name = "Tên người dùng", // Tạm thời
-                Phone = "0123456789",    // Tạm thời
-                Address = "Địa chỉ người dùng", // Tạm thời
+                Name = diaChiGiaoHang?.Tennguoinhan ?? "", // Nếu đã có địa chỉ, điền tên người nhận
+                Phone = diaChiGiaoHang?.Sdtnguoinhan ?? "", // Nếu đã có địa chỉ, điền số điện thoại
+                Address = diaChiGiaoHang?.Diachi ?? "", // Nếu đã có địa chỉ, điền địa chỉ
                 Note = "Ghi chú",
                 PaymentMethodId = phuongThucThanhToanList.FirstOrDefault()?.IdPttt ?? 0,  // Lấy phương thức thanh toán mặc định
                 GioHang = gioHangViewModels, // Khởi tạo danh sách giỏ hàng
@@ -349,6 +354,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
 
 
+
         [HttpPost]
         public async Task<IActionResult> ThanhToan(ThanhToanViewModel model)
         {
@@ -358,48 +364,61 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 return View(model);
             }
 
-         
-
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Lưu địa chỉ giao hàng
-                var diaChi = new DiaChiGiaoHang
-                {
-                    Idnguoidung = model.UserId, // Lấy từ session hoặc user login
-                    Tennguoinhan = model.Name,
-                    Sdtnguoinhan = model.Phone,
-                    Diachi = model.Address
-                };
-                _context.DiaChiGiaoHangs.Add(diaChi);
-                await _context.SaveChangesAsync();
+                DiaChiGiaoHang diaChi;
 
-                // 2. Lưu thông tin đơn hàng
+                // Kiểm tra xem người dùng có địa chỉ giao hàng chưa
+                var existingDiaChi = _context.DiaChiGiaoHangs
+                    .FirstOrDefault(d => d.Idnguoidung == model.UserId);
+
+                if (existingDiaChi != null)
+                {
+                    // Nếu đã có địa chỉ, chỉ cần sử dụng địa chỉ đã có
+                    diaChi = existingDiaChi;
+                }
+                else
+                {
+                    // Nếu chưa có địa chỉ, tạo mới địa chỉ giao hàng
+                    diaChi = new DiaChiGiaoHang
+                    {
+                        Idnguoidung = model.UserId,
+                        Tennguoinhan = model.Name,
+                        Sdtnguoinhan = model.Phone,
+                        Diachi = model.Address
+                    };
+
+                    _context.DiaChiGiaoHangs.Add(diaChi);
+                    await _context.SaveChangesAsync();
+                }
+
+                // Lưu thông tin đơn hàng
                 var donHang = new DonHang
                 {
                     Idnguoidung = model.UserId,
                     Ngaydat = DateTime.Now,
                     Iddiachi = diaChi.Iddiachi,
-                    IdPttt = model.PaymentMethodId, // Sử dụng giá trị phương thức thanh toán
+                    IdPttt = model.PaymentMethodId,
                     Trangthai = "Đang xử lý"
                 };
                 _context.DonHangs.Add(donHang);
                 await _context.SaveChangesAsync(); // Lưu đơn hàng để có Iddonhang
 
-                // 3. Lưu chi tiết đơn hàng và xóa sản phẩm khỏi giỏ hàng
+                // Lưu chi tiết đơn hàng và xóa sản phẩm khỏi giỏ hàng
                 var cartItems = _context.GioHangs
                     .Where(gh => gh.Idnguoidung == model.UserId)
-                    .Include(gh => gh.IdsanphamNavigation)  // Bao gồm thông tin của sản phẩm
+                    .Include(gh => gh.IdsanphamNavigation)
                     .ToList();
+
                 foreach (var item in cartItems)
                 {
-                    // Thêm vào chi tiết đơn hàng
                     var chiTietDonHang = new ChiTietDonHang
                     {
-                        Iddonhang = donHang?.Iddonhang ?? 0, // Giá trị mặc định nếu donHang là null
-                        Idsanpham = item?.Idsanpham ?? 0, // Giá trị mặc định nếu item là null
-                        Soluong = item?.Soluong ?? 0, // Giá trị mặc định nếu item là null
-                        UnitPrice = item?.IdsanphamNavigation?.Gia ?? 0 // Giá từ bảng SanPham (IdsanphamNavigation)
+                        Iddonhang = donHang.Iddonhang,
+                        Idsanpham = item.Idsanpham,
+                        Soluong = item.Soluong,
+                        UnitPrice = item.IdsanphamNavigation.Gia
                     };
 
                     _context.ChiTietDonHangs.Add(chiTietDonHang); // Thêm chi tiết đơn hàng
@@ -408,9 +427,9 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                     _context.GioHangs.Remove(item);
                 }
 
-                await _context.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
+                await _context.SaveChangesAsync();
 
-                // 4. Hoàn tất giao dịch
+                // Hoàn tất giao dịch
                 await transaction.CommitAsync();
 
                 TempData["SuccessMessage"] = "Thanh toán thành công!";
@@ -423,6 +442,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 return View(model);
             }
         }
+
 
 
 
@@ -456,7 +476,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             var viewModel = new DonHangViewModel
             {
                 MaDonHang = donHang.Iddonhang,
-                NgayMua = donHang.Ngaydat,
+                NgayMua = donHang.Ngaydat.HasValue ? donHang.Ngaydat.Value.ToString("dd/MMM/yyyy") : "Không xác định",
                 TongTien = donHang.TotalAmount,
                 PhuongThucThanhToan = donHang.PaymentMethod
             };
@@ -467,41 +487,61 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
 
 
-        public IActionResult CapNhatThongTin()
-        {
-            return View();
-        }
-
-
-
-
-
         /*--------------------------ĐƠN HÀNG--------------------------------*/
 
-        public async Task<IActionResult> LichSuDonHang()
+        /*1. Danh sách đơn hàng*/
+        [HttpGet]
+        public async Task<IActionResult> LichSuDonHang(string query = "")
         {
             // Lấy idNguoiDung từ Session
-            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung"); // Lấy ID người dùng từ session
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
 
+            if (idNguoiDung == null)
+            {
+                return RedirectToAction("Login", "Account"); // Nếu chưa đăng nhập, chuyển tới trang đăng nhập
+            }
 
-            // Truy vấn danh sách đơn hàng
-            var donHangs = await _context.DonHangs
-                .Include(dh => dh.ChiTietDonHangs)
-                .Where(dh => dh.Idnguoidung == idNguoiDung.Value)
-                .OrderByDescending(dh => dh.Ngaydat)
+            // Truy vấn danh sách đơn hàng của người dùng
+            var donHangs = _context.DonHangs
+                .Include(dh => dh.ChiTietDonHangs) // Load chi tiết đơn hàng
+                .Where(dh => dh.Idnguoidung == idNguoiDung.Value) // Chỉ lấy đơn hàng của idNguoiDung
+                .AsQueryable();
+
+            // Kiểm tra điều kiện tìm kiếm (nếu có)
+            if (!string.IsNullOrEmpty(query))
+            {
+                // Kiểm tra nếu query là ngày (dd/MM/yyyy)
+                if (DateTime.TryParseExact(query, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime parsedDate))
+                {
+                    donHangs = donHangs.Where(d => d.Ngaydat.HasValue && d.Ngaydat.Value.Date == parsedDate.Date);
+                }
+                // Kiểm tra nếu query là mã đơn hàng (int)
+                else if (int.TryParse(query, out int parsedId))
+                {
+                    donHangs = donHangs.Where(d => d.Iddonhang == parsedId);
+                }
+            }
+
+            // Chuyển đổi sang ViewModel
+            var donHangViewModels = await donHangs
+                .OrderByDescending(dh => dh.Ngaydat) // Sắp xếp theo ngày đặt giảm dần
                 .Select(dh => new DonHangViewModel
                 {
                     MaDonHang = dh.Iddonhang,
-                    NgayMua = dh.Ngaydat,
+                    NgayMua = dh.Ngaydat.HasValue ? dh.Ngaydat.Value.ToString("dd/MMM/yyyy") : "Không xác định",
                     TongTien = dh.ChiTietDonHangs.Sum(ct => ct.Soluong * ct.UnitPrice),
                     Trangthai = dh.Trangthai
                 })
                 .ToListAsync();
 
-            Console.WriteLine($"Số đơn hàng: {donHangs.Count}");
-
-            return View(donHangs);
+            // Trả về view với danh sách đơn hàng đã lọc
+            return View(donHangViewModels);
         }
+
+
+
+
+
 
 
 
@@ -525,7 +565,7 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 .Select(dh => new DonHangChiTietViewModel
                 {
                     MaDonHang = dh.Iddonhang,
-                    NgayMua = dh.Ngaydat,
+                    NgayMua = dh.Ngaydat.HasValue ? dh.Ngaydat.Value.ToString("dd/MMM/yyyy") : "Không xác định",
                     Trangthai = dh.Trangthai,
                     PhuongThucThanhToan = dh.IdPtttNavigation.Tenphuongthuc,
                     TongTien = dh.ChiTietDonHangs.Sum(ct => ct.Soluong * ct.UnitPrice),
@@ -542,27 +582,187 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
             if (donHang == null)
             {
-                return NotFound();
+                return NotFound(); // Nếu không tìm thấy đơn hàng
             }
 
             return View(donHang);
         }
 
 
-        public IActionResult DiaChiNhanHang()
+
+
+
+
+
+
+
+
+        /*------------------------------------ NGƯỜI DÙNG -----------------------------------*/
+        public async Task<IActionResult> CapNhatThongTin()
         {
-            return View();
+            // Lấy Id người dùng từ session
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
+            if (idNguoiDung == null)
+            {
+                return RedirectToAction("Login", "Account"); // Redirect nếu chưa đăng nhập
+            }
+
+            // Lấy thông tin người dùng từ cơ sở dữ liệu
+            var nguoiDung = await _context.NguoiDungs
+                .FirstOrDefaultAsync(nd => nd.Idnguoidung == idNguoiDung.Value);
+
+            if (nguoiDung == null)
+            {
+                return NotFound("Người dùng không tồn tại.");
+            }
+
+            return View(nguoiDung); // Truyền thông tin người dùng vào view
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CapNhatThongTin([FromBody] NguoiDung model)
+        {
+            if (model.Idnguoidung == null)
+            {
+                return BadRequest(new { message = "Thiếu ID người dùng." });
+            }
+
+            var nguoiDung = await _context.NguoiDungs.FirstOrDefaultAsync(nd => nd.Idnguoidung == model.Idnguoidung);
+            if (nguoiDung == null)
+            {
+                return NotFound(new { message = "Người dùng không tồn tại." });
+            }
+
+            // Chỉ cập nhật các trường không null
+            if (!string.IsNullOrEmpty(model.TenNguoiDung))
+            {
+                nguoiDung.TenNguoiDung = model.TenNguoiDung;
+            }
+
+            if (!string.IsNullOrEmpty(model.Sdt))
+            {
+                nguoiDung.Sdt = model.Sdt;
+            }
+
+            if (model.Ngaysinh != null)
+            {
+                nguoiDung.Ngaysinh = model.Ngaysinh;
+            }
+
+            if (!string.IsNullOrEmpty(model.Gioitinh))
+            {
+                nguoiDung.Gioitinh = model.Gioitinh;
+            }
+
+            // Không cho phép thay đổi email
+            // nguoiDung.Email = model.Email; // Không cập nhật email
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Cập nhật thành công!" });
+        }
+
+
+
+
+
+
+
+
+        public async Task<IActionResult> DiaChiNhanHang()
+        {
+            // Lấy Id người dùng từ session
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
+            if (idNguoiDung == null)
+            {
+                return RedirectToAction("Login", "Account"); // Redirect nếu chưa đăng nhập
+            }
+
+            // Lấy thông tin người dùng từ cơ sở dữ liệu
+            var nguoiDung = await _context.DiaChiGiaoHangs
+                .FirstOrDefaultAsync(nd => nd.Idnguoidung == idNguoiDung.Value);
+
+            if (nguoiDung == null)
+            {
+                return NotFound("Người dùng không tồn tại.");
+            }
+
+            return View(nguoiDung); // Truyền thông tin người dùng vào view
+        }
+
 
         public IActionResult DoiMatKhau()
         {
             return View();
         }
 
+        [HttpPost]
+        public IActionResult DoiMatKhau(string passOld, string passNew, string passNewConfirm)
+        {
+            if (string.IsNullOrEmpty(passOld) || string.IsNullOrEmpty(passNew) || string.IsNullOrEmpty(passNewConfirm))
+            {
+                ViewBag.ErrorMessage = "Tất cả các trường đều phải được điền đầy đủ.";
+                return View();
+            }
+
+            // Lấy người dùng hiện tại (Giả sử idNguoiDung là ID của người dùng đã đăng nhập)
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
+            var nguoiDung = _context.NguoiDungs.FirstOrDefault(u => u.Idnguoidung == idNguoiDung);
+
+            if (nguoiDung == null)
+            {
+                ViewBag.ErrorMessage = "Người dùng không tồn tại.";
+                return View();
+            }
+
+            // Kiểm tra mật khẩu cũ có đúng không
+            if (nguoiDung.Matkhau != passOld)
+            {
+                ViewBag.ErrorMessage = "Mật khẩu cũ không đúng.";
+                return View();
+            }
+
+            // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
+            if (passNew != passNewConfirm)
+            {
+                ViewBag.ErrorMessage = "Mật khẩu mới và mật khẩu xác nhận không khớp.";
+                return View();
+            }
+
+            // Cập nhật mật khẩu mới
+            nguoiDung.Matkhau = passNew;
+            _context.SaveChanges();
+
+            // Hiển thị thông báo thành công
+            ViewBag.SuccessMessage = "Mật khẩu của bạn đã được thay đổi thành công. Bạn sẽ được chuyển hướng đến trang đăng nhập.";
+
+            // Sau khi cập nhật mật khẩu thành công, chuyển hướng về trang đăng nhập
+            return RedirectToAction("Index", "KhachVangLai"); // Thay 'DangNhap' và 'Account' bằng đúng controller và action của bạn
+        }
+
+
+
+
         public IActionResult Index()
         {
             return View();
         }
+
+
+
+
+
+
+
+
+
+        /*-------------------------------- GIỚI THIỆU ----------------------------------*/
+        public IActionResult GioiThieu()
+        {
+            return View();
+        }
+
     }
 
 
