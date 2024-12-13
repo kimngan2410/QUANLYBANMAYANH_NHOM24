@@ -45,7 +45,6 @@ app.UseSession(); // Kích hoạt session
 app.UseRouting();
 
 app.UseAuthorization();
-app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
