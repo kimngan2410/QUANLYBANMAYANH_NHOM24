@@ -5,11 +5,17 @@
 
     var sonySanPhams = ViewBag.SonySanPhams as List<QUANLYBANMAYANH_NHOM24.Models.SanPham>;
     var sonyDanhMucCon = ViewBag.SonyDanhMucCon as List<QUANLYBANMAYANH_NHOM24.Models.DanhMucCon>;
+
+    var ongKinh = ViewBag.OngKinh as List<QUANLYBANMAYANH_NHOM24.Models.SanPham>;
+
 }
 
 @{
     Layout = "_KhachHangLayout";
 }
+
+<link rel="stylesheet" type="text/css" href="~/css/TrangChu.css">
+
 
 <!-- CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -53,142 +59,101 @@
         </div>
         </div>
         <!-- Canon Camera -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0">Canon Camera</h3>
-            <ul class="nav nav-pills">
-                @foreach (var dm in canonDanhMucCon)
-                {
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index", "KhachVangLai", new { idHang = 1, idDanhMucCon = dm.Iddanhmuccon })"
-                           class="nav-link @(ViewBag.IdDanhMucCon == dm.Iddanhmuccon ? "active" : "")">
-                            @dm.Tendanhmuccon
-                        </a>
-                    </li>
-                }
-            </ul>
-        </div>
-        <div class="row">
-            @foreach (var sp in canonSanPhams)
-            {
-                <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                    <div class="card">
-                        <img src="@Url.Content(sp.DiachianhSp)" class="card-img-top" alt="@sp.Tensp">
-                        <div class="card-body text-center">
-                            <h6 class="card-title">@sp.Tensp</h6>
-                            <p class="card-text text-danger">@sp.Gia.ToString("N0") đ</p>
-                        <button class="btn btn-primary" onclick="addToCart(@sp.Idsanpham)">Thêm vào giỏ hàng</button>
-                    </div>
-                    </div>
-                </div>
-            }
-        </div>
-
-        <!-- Sony Camera -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <h3>Sony Camera</h3>
-                <ul class="nav nav-pills mb-3">
-                    @foreach (var dm in sonyDanhMucCon)
-                    {
-                        <li class="nav-item">
-                            <a href="@Url.Action("Index", "KhachVangLai", new { idDanhMucConSony = dm.Iddanhmuccon })"
-                               class="nav-link">
-                                @dm.Tendanhmuccon
-                            </a>
-                        </li>
-                    }
-                </ul>
+        <div class="canon-product d-flex justify-content-between align-items-center" style=" margin-top: 80px;">
+            <img src="~/images/logo-canon.png" alt="Canon" class="canon-logo" style="width: 15%;">
+            <div class="see-more-button">
+                <span class="button-text">Xem thêm</span>
+                <i class="fa-solid fa-circle-right"></i>
             </div>
         </div>
-        <div class="row">
-            @foreach (var sp in sonySanPhams)
+        <div class="row product-grid" style="margin-top: 20px; margin-bottom: 65px;">
+            @foreach (var sp in canonSanPhams)
             {
-                <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
-                    <div class="card">
-                        <img src="@Url.Content(sp.DiachianhSp)" class="card-img-top" alt="@sp.Tensp" style="width: 100px; height: 100px;">
+                <a href="@Url.Action("ChiTietSanPham", "KhachHang", new { id = sp.Idsanpham })" class="product">
+                    <div class="product-card">
+                        <div class="img-product">
+                             <img src="@Url.Content(sp.DiachianhSp)" class="card-img-top" alt="@sp.Tensp">   
+                        </div>
                         <div class="card-body text-center">
                             <h6 class="card-title">@sp.Tensp</h6>
-                            <p class="card-text text-danger">@sp.Gia.ToString("N0") đ</p>
-                        <button class="btn btn-primary" onclick="addToCart(@sp.Idsanpham)">Thêm vào giỏ hàng</button>
+                            <p class="card-text">@sp.Gia.ToString("N0") đ</p>
+                        </div>
                     </div>
-                    </div>
-                </div>
+                </a>
             }
         </div>
 
-    <!--INPUT IDNGUOI DUNG ẨN-->
-    <input type="hidden" id="hidden-user-id" value="@ViewBag.IdNguoiDung">
+
+        <!-- HÌNH ẢNH QUẢNG CÁO -->
+    <div class="main-container" style="margin-top: 30px;">
+            <div class="highlighted-product">
+                <img src="~/images/poster_camera.jpg" alt="Camera" class="highlighted-image">
+            </div>
+            <div class="product-list">
+                <div class="item-card">
+                    <img src="~/images/qc_1.jpg" alt="GoPro" class="item-image">
+                </div>
+                <div class="item-card">
+                    <img src="~/images/qc_2.jpg" alt="Fujifilm" class="item-image">
+                </div>
+                <!-- Bạn có thể thêm nhiều sản phẩm khác ở đây -->
+            </div>
+        </div>
 
 
 
-
-        <!--Scipt-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function addToCart(idSanPham) {
-            const soLuong = 1; // Số lượng mặc định
-            $.ajax({
-                url: '/KhachHang/ThemVaoGioHang',
-                type: 'POST',
-                data: { idSanPham: idSanPham, soLuong: soLuong },
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công!',
-                            text: 'Sản phẩm đã được thêm vào giỏ hàng.',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-
-                        $('#cart-count').text(response.cartCount); // Cập nhật số lượng giỏ hàng
-                    } else {
-                        // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
-                        if (response.redirectUrl) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Thông báo',
-                                text: response.message,
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                window.location.href = response.redirectUrl;
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi',
-                                text: response.message
-                            });
-                        }
-                    }
-                },
-                error: function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.'
-                    });
+        <!-- Sony Camera -->
+        <div class="canon-product d-flex justify-content-between align-items-center" style=" margin-top: 80px;">
+                <img src="~/images/Sony_logo.png" alt="sony" class="canon-logo" style="width: 20%; margin-right: 30px;">
+            <div class="see-more-button">
+                <span class="button-text">Xem thêm</span>
+                <i class="fa-solid fa-circle-right"></i>
+            </div>
+        </div>
+        <div class="row product-grid" style="margin-top: -5px; margin-bottom: 50px;">
+        @foreach (var ok in sonySanPhams)
+                {
+            <a href="@Url.Action("ChiTietSanPham", "KhachHang", new { id = ok.Idsanpham })" class="product">
+                            <div class="product-card">
+                                    <div class="img-product">
+                                        <img src="@Url.Content(ok.DiachianhSp)" class="card-img-top" alt="@ok.Tensp">
+                                    </div>
+                                    <div class="card-body text-lg-start">
+                                        <h6 class="card-title">@ok.Tensp</h6>
+                                        <p class="card-text">@ok.Gia.ToString("N0") đ</p>
+                                   </div>
+                                </div>
+                    </a>
                 }
-            });
+            </div>
+
+
+
+
+    <!-- ỐNG KÍNH -->
+    <div class="canon-product d-flex justify-content-between align-items-center" style=" margin-top: 100px;">
+        <h4 style="font-size: 34px; color: darkred; font-family: quicksand-bold, sans-serif; font-weight: bold;">Ống kính (Lens)</h4>
+        <div class="see-more-button">
+            <span class="button-text">Xem thêm</span>
+            <i class="fa-solid fa-circle-right"></i>
+        </div>
+    </div>
+    <div class="row product-grid" style="margin-top: 20px; margin-bottom: 100px;">
+        @foreach (var sp in ongKinh)
+        {
+            <a href="@Url.Action("ChiTietSanPham", "KhachHang", new { id = sp.Idsanpham })" class="product">
+                <div class="product-card">
+                    <div class="img-product">
+                        <img src="@Url.Content(sp.DiachianhSp)" class="card-img-top" alt="@sp.Tensp">
+                    </div>
+                    <div class="card-body text-lg-start">
+                        <h6 class="card-title">@sp.Tensp</h6>
+                        <p class="card-text">@sp.Gia.ToString("N0") đ</p>
+                    </div>
+                </div>
+            </a>
         }
+    </div>
 
-
-
-        // Gọi hàm này khi tải trang để cập nhật số lượng giỏ hàng
-        $(document).ready(function () {
-            $.ajax({
-                url: '/KhachHang/LaySoLuongGioHang', // Tạo API để lấy số lượng sản phẩm
-                type: 'GET',
-                success: function (response) {
-                    if (response.success) {
-                        $('#cart-count').text(response.cartCount);
-                    }
-                },
-                error: function () {
-                    console.error('Không thể lấy số lượng giỏ hàng.');
-                }
-            });
-        });
-    </script>
-</div>
+   
+   

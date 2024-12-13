@@ -1,16 +1,15 @@
-﻿@model QUANLYBANMAYANH_NHOM24.Models.DiaChiGiaoHang
+﻿@model QUANLYBANMAYANH_NHOM24.Models.MyViewModels
 
 @{
     ViewData["Title"] = "Địa Chỉ nhận hàng";
 }
 
-<link rel="stylesheet" type="text/css" href="./../css/DiaChiNhanHang.css">
-
+<link rel="stylesheet" type="text/css" href="~/css/DiaChiNhanHang.css">
 
 <div class="breadcrumb">
-     <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
+    <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
     <span class="dot">•</span>
-     <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="account">Tài khoản</a>
+    <a href="@Url.Action("CapNhatThongTin", "KhachHang")" class="account">Tài khoản</a>
     <span class="dot">•</span>
     <a class="address">Địa chỉ nhận hàng</a>
 </div>
@@ -18,8 +17,8 @@
 <div class="profile-container mt-5">
     <div class="sidebar col-md-6">
         <div class="avtar-name-user">
-            <img src="./../images/user_avatar.png" />
-            <h2>Nguyễn Văn A</h2>
+            <img src="~/images/user_avatar.png" />
+            <h2>@Model.NguoiDung.TenNguoiDung</h2>
         </div>
         <ul>
             <li class="acc-menu-items">
@@ -48,31 +47,30 @@
             </li>
         </ul>
     </div>
+
     <div class="delivery-address col-md-6">
         <h2>Địa chỉ giao hàng</h2>
         <div class="address-info">
             <form method="post">
+                @foreach (var diaChi in Model.DiaChiGiaoHang)
+                {
+                    <div class="form-group">
+                        <label for="fullName">Họ và tên</label>
+                        <input type="text" id="fullName" name="fullName" value="@diaChi.Tennguoinhan" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại</label>
+                        <input type="text" id="phone" name="phone" value="@diaChi.Sdtnguoinhan" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ</label>
+                        <input class="addres-details" type="text" id="address" name="address" value="@diaChi.Diachi" required>
+                    </div>
+                }
                 <div class="form-group">
-                    <label for="fullName">Họ và tên</label>
-                    <input type="text" id="fullName" name="fullName" value="@Model.Tennguoinhan" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Số điện thoại</label>
-                    <input type="text" id="phone" name="phone" value="@Model.Sdtnguoinhan" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Địa chỉ</label>
-                    <input class="addres-details" type="text" id="address" name="address" value="@Model.Diachi" required>
+                    <button type="submit" class="btn-confirm">Xác nhận</button>
                 </div>
             </form>
-            <div class="form-group">
-                <button type="submit" class="btn-confirm">Xác nhận</button>
-            </div
         </div>
     </div>
-
-
-
-    <!-------------  Scrip  t--------------->
-
 </div>

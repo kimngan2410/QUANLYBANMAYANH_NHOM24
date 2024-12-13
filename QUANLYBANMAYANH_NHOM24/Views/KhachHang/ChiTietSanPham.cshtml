@@ -1,0 +1,311 @@
+﻿@model QUANLYBANMAYANH_NHOM24.Models.SanPham
+
+@{
+    var canonSanPhams = ViewBag.CanonSanPhams as List<QUANLYBANMAYANH_NHOM24.Models.SanPham>;
+    var canonDanhMucCon = ViewBag.CanonDanhMucCon as List<QUANLYBANMAYANH_NHOM24.Models.DanhMucCon>;
+
+}
+
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: quicksand-regular, sans-serif;
+        }
+
+
+
+        /*------- Thanh điều hướng ---------*/
+        .breadcrumb {
+            font-family: 'quicksand-semibold', sans-serif;
+            font-size: 14px;
+            background-color: white; /* Màu nền sáng */
+            padding: 5px;
+            border: 2px solid #1E4752;
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+
+        .home, .user-info {
+            text-decoration: none;
+            padding: 0 10px; /* Padding để tạo khoảng cách giữa các liên kết */
+            line-height: 1.5; /* Căn chỉnh chiều cao của liên kết */
+        }
+
+        .home {
+            color: #000000;
+        }
+
+        .user-info {
+            color: #E4A400;
+        }
+
+        .breadcrumb a:hover {
+            color: #E4A400; /* Màu khi di chuột vào */
+        }
+
+        .dot {
+            color: #5c5c5c;
+            padding: 0 5px; /* Khoảng cách giữa dấu chấm và các liên kết */
+            line-height: 1.5;
+            font-size: 20px; /* Căn chỉnh chiều cao cho dấu chấm */
+        }
+
+
+
+        .product-detail {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin-top: 40px;
+            margin-bottom: 100px;
+        }
+
+        .product-image {
+            border-right: 1px soild #1E4752;
+
+        }
+
+        .product-image img {
+            width: 100%;
+           
+            border-radius: 8px;
+            margin-right: 30px;
+            
+        }
+
+        .product-info {
+            max-width: 600px;
+            margin-left: 30px;
+        }
+
+            .product-info h2 {
+                font-size: 36px;
+                font-weight: bold;
+                font-family: quicksand-bold, sans-serif;
+            }
+
+            .product-info p{
+                font-family: quicksand-regular, sans-serif;
+            }
+
+        .product-category span {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .product-price {
+            font-size: 28px;
+            color: orange;
+            font-weight: bold;
+            font-family: quicksand-semibold, sans-serif;
+        }
+
+        .product-description {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .product-options {
+            margin: 20px 0;
+        }
+
+        .product-weight button,
+        .product-quantity button {
+            border: 1px solid #ccc;
+            background-color: #1E4752;
+            padding: 5px 10px;
+            margin: 0 8px;
+            cursor: pointer;
+            border-radius: 50px;
+            color: white;
+            height: 30px;
+            font-size: 14px;
+            text-align: center;
+        
+        }
+
+        .product-quantity input {
+            width: 50px;
+            text-align: center;
+        }
+
+        .product-quantity input {
+            border-radius: 5px;
+            font-family: quicksand-regular, sans-serif;
+        }
+
+        .quantity-decrease,
+        .quantity-increase {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .stock-info {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .product-buttons .btn-add-cart {
+            padding: 10px 25px;
+            border: none;
+            cursor: pointer;
+            border-radius: 25px;
+            border-radius: 5px;
+            font-family: quicksand-semibold, sans-serif;
+        }
+
+        .btn-add-cart {
+            background-color: #1E4752; 
+            color: white;
+            font-family: quicksand-semibold, sans-serif;
+            padding: 10px 25px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="@Url.Action("Index", "KhachVangLai")" class="home">Trang chủ</a>
+        <span class="dot">•</span>
+        <a class="user-info">@Model.Tensp</a>
+    </div>
+
+    <div class="product-detail">
+        <div class="product-image" style="border: 1px solid #E3E3E3; border-radius: 10px;justify-content: center; display: flex; align-items: center; width: 680px; padding: 20px;">
+            <img src="@Url.Content(Model.DiachianhSp)" alt="@Model.Tensp">
+        </div>
+        <div class="product-info">
+            <h2>@Model.Tensp</h2>
+
+            @if (Model.IdhangNavigation != null)
+            {
+                <p>Hãng: @Model.IdhangNavigation.Tenhang</p>
+            }
+
+            <hr>
+            <p class="product-price">@Model.Gia.ToString("N0") đ</p>
+            <p class="product-description">
+                @Model.Mota
+            </p>
+            <div class="product-options">
+                <div class="product-quantity">
+                    <span style="font-family: quicksand-regular, sans-serif;">Số lượng:</span>
+                    <button class="quantity-decrease">-</button>
+                    <input type="number" value="1" min="1" max="18" style="font-family: quicksand-regular, sans-serif;">
+                    <button class="quantity-increase">+</button>
+                    <span class="stock-info" style="font-family: quicksand-regular, sans-serif;">(Có @Model.Soluongcon sản phẩm có sẵn)</span>
+                </div>
+            </div>
+            <div class="product-buttons">
+                <button class="btn-add-cart" style="border-radius: 30px;" onclick="addToCart(@Model.Idsanpham)">Thêm vào giỏ hàng</button>
+            </div>
+        </div>
+
+       
+
+        <!--Scipt-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function addToCart(idSanPham) {
+                const soLuong = parseInt($("input[type='number']").val()); // Lấy số lượng từ input
+                if (soLuong < 1) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng phải lớn hơn 0.'
+                    });
+                    return;
+                }
+
+                console.log('Button clicked!');
+
+
+                $.ajax({
+                    url: '/KhachHang/ThemVaoGioHang',
+                    type: 'POST',
+                    data: { idSanPham: idSanPham, soLuong: soLuong },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                text: 'Sản phẩm đã được thêm vào giỏ hàng.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            $('#cart-count').text(response.cartCount); // Cập nhật số lượng giỏ hàng
+                        } else {
+                            if (response.redirectUrl) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Thông báo',
+                                    text: response.message,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    window.location.href = response.redirectUrl; // Chuyển hướng đến trang đăng nhập
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: response.message
+                                });
+                            }
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.'
+                        });
+                    }
+                });
+            }
+
+            // Xử lý tăng giảm số lượng sản phẩm
+            $(".quantity-decrease").click(function () {
+                let quantity = parseInt($("input[type='number']").val());
+                if (quantity > 1) {
+                    $("input[type='number']").val(quantity - 1);
+                }
+            });
+
+            $(".quantity-increase").click(function () {
+                let quantity = parseInt($("input[type='number']").val());
+                if (quantity < @Model.Soluongcon) {
+                    $("input[type='number']").val(quantity + 1);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Số lượng vượt quá hàng tồn kho.'
+                    });
+                }
+            });
+        </script>
+    </div>
+
+</body>
+</html>
+
+

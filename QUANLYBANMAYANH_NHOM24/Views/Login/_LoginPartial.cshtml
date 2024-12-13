@@ -4,6 +4,12 @@
 <!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<style>
+    .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ (đen, độ trong suốt 50%) */
+    }
+</style>
+
 <!-- Login Menu Modal -->
 <div id="LoginMenu" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -36,7 +42,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-envelope"></i> <!-- Icon email -->
                         </span>
-                        <input type="email" id="Email" name="Email" class="form-control" placeholder="Email" />
+                        <input type="email" id="Email" name="Email" class="form-control" placeholder="Email" width="100"/>
                     </div>
 
                     <!-- Password Input -->
@@ -51,18 +57,25 @@
                     <button type="submit" class="btn btn-custom w-100">Đăng nhập</button>
 
                     <!-- Extra Links -->
-                    <div class="mt-3 text-center">
+                    <div class="mt-3 text-center" style="margin-top: 15px;">
                         <a href="#" class="text-decoration-none text-custom">Quên mật khẩu?</a><br />
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#RegisterForm" data-bs-dismiss="modal" class="text-decoration-none text-custom">Đăng ký tài khoản</a>
                     </div>
-
+                    <div class="text-center mt-3">
+                        <span>
+                            Bạn chưa có tài khoản?
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#LoginForm" data-bs-dismiss="modal" style="color: #1E4752;">Đăng ký tài khoản</a>
+                        </span>
+                    </div>
+                    <hr />
                     <!-- Social Login -->
                     <div class="mt-3 text-center">
                         <p>Hoặc đăng nhập với:</p>
-                        <button type="button" class="btn btn-outline-dark">
+                        <button type="button" class="btn btn-outline-dark" style="margin-right: 8x;">
+                            <img src="~/images/google.png" style="width: 15px; margin-left: 5px;"/>
                             Google
                         </button>
-                        <button type="button" class="btn btn-outline-dark">
+                        <button type="button" class="btn btn-outline-dark" style="margin-left: 8px;">
+                            <img src="~/images/facebook_logo (1).png" style="width: 20px" />
                             Facebook
                         </button>
                     </div>

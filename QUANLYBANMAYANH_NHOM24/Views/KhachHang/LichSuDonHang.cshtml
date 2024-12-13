@@ -1,6 +1,4 @@
-﻿@model IEnumerable<QUANLYBANMAYANH_NHOM24.Models.DonHangViewModel>
-
-
+﻿@model QUANLYBANMAYANH_NHOM24.Models.MyViewModels
 
 @{
     ViewData["Title"] = "Lịch sử đơn hàng";
@@ -21,7 +19,7 @@
     <div class="sidebar col-md-6">
         <div class="avtar-name-user">
             <img src="./../images/user_avatar.png" />
-            <h2>Nguyễn Văn A</h2>
+            <h2>@Model.NguoiDung.TenNguoiDung</h2>
         </div>
         <ul>
             <li class="acc-menu-items">
@@ -63,7 +61,7 @@
 
             </div>           
 
-            @if (Model != null && Model.Any())
+            @if (Model.DonHang != null && Model.DonHang.Any())
             {
                 <table>
                     <thead>
@@ -75,7 +73,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var donHang in Model)
+                        @foreach (var donHang in Model.DonHang)
                         {
                             <tr>
                                 <td>

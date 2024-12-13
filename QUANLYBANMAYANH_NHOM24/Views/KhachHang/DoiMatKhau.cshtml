@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Đổi Mật Khẩu";
 }
 
@@ -16,7 +17,7 @@
     <div class="sidebar col-md-6">
         <div class="avtar-name-user">
             <img src="./../images/user_avatar.png" />
-            <h2>Nguyễn Văn A</h2>
+            <h2>Lê Thị Kim Ngân</h2>
         </div>
         <ul>
             <li class="acc-menu-items">
@@ -94,28 +95,27 @@
 
 
 
-    <!-------------  Scrip  t--------------->
-    <script>
-        document.querySelectorAll('.f-lock').forEach((lock) => {
-    const input = lock.previousElementSibling;
-    const [viewIcon, hideIcon] = lock.querySelectorAll('img');
+<!-------------  Scrip  t--------------->
+<script>
+    document.querySelectorAll('.f-lock').forEach((lock) => {
+        const input = lock.previousElementSibling;
+        const [viewIcon, hideIcon] = lock.querySelectorAll('img');
 
-    lock.addEventListener('click', () => {
-        if (input.type === 'password') {
-            input.type = 'text';
-            viewIcon.style.opacity = 1;
-            hideIcon.style.opacity = 0;
-        } else {
-            input.type = 'password';
-            viewIcon.style.opacity = 0;
-            hideIcon.style.opacity = 1;
-        }
+        lock.addEventListener('click', () => {
+            if (input.type === 'password') {
+                input.type = 'text';
+                viewIcon.style.opacity = 1;
+                hideIcon.style.opacity = 0;
+            } else {
+                input.type = 'password';
+                viewIcon.style.opacity = 0;
+                hideIcon.style.opacity = 1;
+            }
+        });
     });
-});
 
-    </script>
+</script>
 
-    
+
 </div>
-
 

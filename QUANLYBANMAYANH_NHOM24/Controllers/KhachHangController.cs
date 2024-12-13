@@ -47,13 +47,18 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 // Trả về Partial View đăng nhập
                 var partialHtml = _viewRenderHelper.RenderPartialViewToString(this, "_LoginPartial", new LoginViewModel());
 
-
                 return Json(new
                 {
                     success = false,
                     message = "Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng.",
                     partialLoginHtml = partialHtml // Gửi HTML của Partial View xuống client
                 });
+            }
+
+            // Kiểm tra số lượng sản phẩm
+            if (soLuong < 1 || soLuong > 18)
+            {
+                return Json(new { success = false, message = "Số lượng không hợp lệ." });
             }
 
             // Nếu đã đăng nhập, xử lý thêm sản phẩm vào giỏ hàng
@@ -534,8 +539,19 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 })
                 .ToListAsync();
 
-            // Trả về view với danh sách đơn hàng đã lọc
-            return View(donHangViewModels);
+            var nguoiDung = await _context.NguoiDungs.FirstOrDefaultAsync(nd => nd.Idnguoidung == idNguoiDung);
+            if (nguoiDung == null)
+            {
+                return NotFound("Người dùng không tồn tại.");
+            }
+            var viewModel = new MyViewModels
+            {
+                NguoiDung = nguoiDung,  // Ensure that NguoiDung is initialized properly
+                DonHang = donHangViewModels
+            };
+
+            return View(viewModel); // Đúng
+
         }
 
 
@@ -585,8 +601,36 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
                 return NotFound(); // Nếu không tìm thấy đơn hàng
             }
 
-            return View(donHang);
+            // Truy vấn thông tin người dùng từ cơ sở dữ liệu
+            var nguoiDung = await _context.NguoiDungs
+                .Where(nd => nd.Idnguoidung == idNguoiDung.Value)
+                .FirstOrDefaultAsync();
+
+            if (nguoiDung == null)
+            {
+                return Json(new { success = false, message = "Người dùng không tồn tại." });
+            }
+
+            // Khởi tạo ViewModel chung và gán NguoiDung
+            var viewModel = new MyViewModels
+            {
+                DonHang = new List<DonHangViewModel> { new DonHangViewModel
+            {
+                MaDonHang = donHang.MaDonHang,
+                NgayMua = donHang.NgayMua,
+                Trangthai = donHang.Trangthai,
+                PhuongThucThanhToan = donHang.PhuongThucThanhToan,
+                TongTien = donHang.TongTien
+            }},
+                    chiTietDonHang = donHang.ChiTietDonHangs,
+                    DonHangChiTiet = donHang,
+                    NguoiDung = nguoiDung // Gán đối tượng người dùng
+                };
+
+            return View(viewModel); // Trả về ViewModel chung
         }
+
+
 
 
 
@@ -680,16 +724,29 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             }
 
             // Lấy thông tin người dùng từ cơ sở dữ liệu
-            var nguoiDung = await _context.DiaChiGiaoHangs
-                .FirstOrDefaultAsync(nd => nd.Idnguoidung == idNguoiDung.Value);
+            var nguoiDung = await _context.NguoiDungs
+                .FirstOrDefaultAsync(nd => nd.Idnguoidung == idNguoiDung);
 
             if (nguoiDung == null)
             {
                 return NotFound("Người dùng không tồn tại.");
             }
 
-            return View(nguoiDung); // Truyền thông tin người dùng vào view
+            // Lấy thông tin địa chỉ giao hàng của người dùng
+            var diaChiGiaoHang = await _context.DiaChiGiaoHangs
+                .Where(d => d.Idnguoidung == idNguoiDung.Value)
+                .ToListAsync();
+
+            // Tạo viewModel với thông tin người dùng và địa chỉ giao hàng
+            var viewModel = new MyViewModels
+            {
+                NguoiDung = nguoiDung,
+                DiaChiGiaoHang = diaChiGiaoHang
+            };
+
+            return View(viewModel); // Truyền thông tin vào view
         }
+
 
 
         public IActionResult DoiMatKhau()
@@ -697,49 +754,8 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult DoiMatKhau(string passOld, string passNew, string passNewConfirm)
-        {
-            if (string.IsNullOrEmpty(passOld) || string.IsNullOrEmpty(passNew) || string.IsNullOrEmpty(passNewConfirm))
-            {
-                ViewBag.ErrorMessage = "Tất cả các trường đều phải được điền đầy đủ.";
-                return View();
-            }
-
-            // Lấy người dùng hiện tại (Giả sử idNguoiDung là ID của người dùng đã đăng nhập)
-            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
-            var nguoiDung = _context.NguoiDungs.FirstOrDefault(u => u.Idnguoidung == idNguoiDung);
-
-            if (nguoiDung == null)
-            {
-                ViewBag.ErrorMessage = "Người dùng không tồn tại.";
-                return View();
-            }
-
-            // Kiểm tra mật khẩu cũ có đúng không
-            if (nguoiDung.Matkhau != passOld)
-            {
-                ViewBag.ErrorMessage = "Mật khẩu cũ không đúng.";
-                return View();
-            }
-
-            // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
-            if (passNew != passNewConfirm)
-            {
-                ViewBag.ErrorMessage = "Mật khẩu mới và mật khẩu xác nhận không khớp.";
-                return View();
-            }
-
-            // Cập nhật mật khẩu mới
-            nguoiDung.Matkhau = passNew;
-            _context.SaveChanges();
-
-            // Hiển thị thông báo thành công
-            ViewBag.SuccessMessage = "Mật khẩu của bạn đã được thay đổi thành công. Bạn sẽ được chuyển hướng đến trang đăng nhập.";
-
-            // Sau khi cập nhật mật khẩu thành công, chuyển hướng về trang đăng nhập
-            return RedirectToAction("Index", "KhachVangLai"); // Thay 'DangNhap' và 'Account' bằng đúng controller và action của bạn
-        }
+       
+       
 
 
 
@@ -751,8 +767,27 @@ namespace QUANLYBANMAYANH_NHOM24.Controllers
 
 
 
+        /*-------------------------------- CHI TIẾT SẢN PHẨM ----------------------------------*/
 
+        public IActionResult ChiTietSanPham(int id)
+        {
+            int? idNguoiDung = HttpContext.Session.GetInt32("IdNguoiDung");
 
+           
+            ViewBag.IdNguoiDung = idNguoiDung;
+
+            var sanPham = _context.SanPhams
+                .Include(sp => sp.IddanhmucconNavigation) // Lấy thông tin danh mục con nếu cần
+                .Include(sp => sp.IdhangNavigation) // Lấy thông tin hãng
+                .FirstOrDefault(sp => sp.Idsanpham == id);
+
+            if (sanPham == null)
+            {
+                return NotFound();
+            }
+
+            return View(sanPham);
+        }
 
 
 

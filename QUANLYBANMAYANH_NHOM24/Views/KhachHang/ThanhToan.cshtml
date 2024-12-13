@@ -9,6 +9,12 @@
 }
 
 <link rel="stylesheet" type="text/css" href="./../css/ThanhToan.css">
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 <div class="breadcrumb">
@@ -120,23 +126,41 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function submitCheckout() {
-    // Lấy giá trị từ các trường trong form
-    var name = document.getElementById('name').value;
-    var phone = document.getElementById('phone').value;
-    var paymentMethod = document.querySelector('input[name="payment"]:checked');
+        // Lấy giá trị từ các trường trong form
+        var name = document.getElementById('name').value;
+        var phone = document.getElementById('phone').value;
+        var paymentMethod = document.querySelector('input[name="payment"]:checked');
 
-    // Kiểm tra các trường bắt buộc
-    if (!name || !phone || !paymentMethod) {
-        alert("Vui lòng điền đầy đủ thông tin (Họ và tên, Số điện thoại, và Phương thức thanh toán).");
-        return false;
+        // Kiểm tra các trường bắt buộc
+        if (!name || !phone || !paymentMethod) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Thông tin chưa đầy đủ',
+                text: 'Vui lòng điền đầy đủ thông tin (Họ và tên, Số điện thoại, và Phương thức thanh toán).',
+                confirmButtonText: 'Đã hiểu'
+            });
+            return false;
+        }
+
+        // Gửi giá trị của phương thức thanh toán vào form hidden để gửi đến backend
+        document.getElementById("PaymentMethodId").value = paymentMethod.value;
+
+        // Hiển thị thông báo xác nhận trước khi gửi form
+        Swal.fire({
+            icon: 'question',
+            title: 'Xác nhận thanh toán',
+            text: 'Bạn có chắc chắn muốn gửi đơn hàng?',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu người dùng xác nhận, gửi form
+                $('#formThanhToan').submit();
+            }
+        });
     }
 
-    // Gửi giá trị của phương thức thanh toán vào form hidden để gửi đến backend
-    document.getElementById("PaymentMethodId").value = paymentMethod.value;
-
-    // Nếu tất cả các trường hợp lệ, gửi form
-    $('#formThanhToan').submit();
-}
 
 </script>
 

@@ -1,0 +1,218 @@
+﻿@font-face {
+    font-family: 'quicksand-regular';
+    src: url('../fonts/quicksand-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-bold';
+    src: url('../fonts/quicksand-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'quicksand-semibold';
+    src: url('../fonts/quicksand-semibold.ttf') format('truetype');
+}
+
+
+/* Layout grid để hiển thị tối đa 5 sản phẩm mỗi hàng */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 cột trong mỗi hàng */
+    gap: 20px; /* Khoảng cách giữa các sản phẩm */
+
+}
+
+   /* CSS cho thẻ <a> sản phẩm */
+    .product-grid .product {
+        display: block; /* Đảm bảo thẻ a chiếm toàn bộ vùng */
+        text-decoration: none; /* Loại bỏ gạch chân */
+        color: inherit; /* Giữ nguyên màu chữ */
+        transition: all 0.3s ease-in-out; /* Tạo hiệu ứng mượt */
+    }
+
+/* Hiệu ứng khi hover */
+        .product-grid .product:hover {
+            transform: translateY(-15px); /* Di chuyển lên trên 10px */
+            border-radius: 5px; /* Góc bo tròn để thêm mềm mại */
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+
+/* Thẻ hình ảnh bên trong thẻ <a> */
+        .product-grid .product img {
+            border-radius: 5px; /* Đảm bảo góc hình ảnh phù hợp */
+        }
+
+
+/* Mỗi sản phẩm có một card */
+.product-card {
+    display: flex;
+    flex-direction: column; /* Đặt hướng của các phần tử theo cột */
+    align-items: center; /* Căn giữa các phần tử theo chiều ngang */
+    justify-content: center; /* Căn giữa các phần tử theo chiều dọc */
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 300px;
+    min-width: 220px;
+    width: 220px;
+    height: 320px;
+    background-color: white;
+    border: 0.5px solid #E3E3E3;
+}
+
+
+    .product-card{
+        text-align: center;
+        padding: 10px;
+    }
+
+.img-product {
+    width: 200px;
+    height: 200px;
+    object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .img-product img {
+        width: 80%;
+        object-fit: cover; /* Đảm bảo ảnh được cắt tỉa vừa vặn */
+    }
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: end;
+    text-align: start;
+    padding: 10px;
+}
+
+.product {
+    text-decoration: none;
+}
+
+.card-title {
+    text-align: start;
+    display: -webkit-box; /* Để kích hoạt flexbox cho text */
+    -webkit-line-clamp: 2; /* Hiển thị tối đa 2 dòng */
+    -webkit-box-orient: vertical; /* Hướng của box */
+    overflow: hidden; /* Ẩn nội dung tràn */
+    text-overflow: ellipsis; /* Thêm dấu ba chấm nếu vượt quá */
+    height: 50px; /* Chiều cao cố định để các tiêu đề đồng đều */
+    font-family: quicksand-bold, sans-serif;
+    font-size: 16px; /* Kích thước chữ phù hợp */
+    line-height: 1.2em; /* Điều chỉnh khoảng cách dòng */
+    color: #1E4752;
+}
+
+.card-text {
+    color: #E4A400;
+    font-family: quicksand-semibold, sans-serif;
+}
+
+.canon-productd {
+    margin-top: 60px;
+}
+
+.canon-productd img{
+    width: 10%;
+}
+
+
+.see-more-button {
+    display: flex;
+    align-items: center;
+    background-color: #1E4752; /* Màu nền nút */
+    border-radius: 20px; /* Đường viền tròn */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+    .see-more-button i{
+        color: white;
+    }
+
+    .see-more-button:hover {
+        background-color: #E4A400; /* Màu nền khi hover */
+    }
+
+.button-text {
+    color: white; /* Màu chữ */
+    font-weight: bold; /* Chữ đậm */
+    margin-right: 10px; /* Khoảng cách giữa chữ và biểu tượng */
+}
+
+
+
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 cột trên màn hình nhỏ hơn */
+    }
+}
+
+@media (max-width: 992px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 cột trên màn hình trung bình */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 cột trên màn hình nhỏ hơn nữa */
+    }
+}
+
+
+.main-container {
+    display: flex;
+    padding: 20px;
+    background-color: white;
+}
+
+.highlighted-product {
+    flex: 1;
+    margin-right: 20px;
+    position: relative;
+}
+
+.highlighted-image {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.highlighted-text {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.product-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 15px;
+    text-align: center;
+    flex: 1 1 calc(25% - 20px);
+}
+
+.item-image {
+    width: 100%;
+    border-radius: 5px;
+}
+
+

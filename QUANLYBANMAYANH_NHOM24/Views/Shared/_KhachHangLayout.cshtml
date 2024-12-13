@@ -140,9 +140,9 @@
         </div>
     </footer>
     <!-- Modal đăng nhập, đăng ký -->
-    @if (ViewContext.RouteData.Values["controller"]?.ToString() == "KhachVangLai")
+    @if (!User.Identity.IsAuthenticated)
     {
-        @Html.Partial("~/Views/Login/_LoginPartial.cshtml")
+        @Html.Partial("~/Views/Login/_LoginPartial.cshtml", new LoginViewModel())
     }
     <script src="~/js/site.js"></script>
 </body>

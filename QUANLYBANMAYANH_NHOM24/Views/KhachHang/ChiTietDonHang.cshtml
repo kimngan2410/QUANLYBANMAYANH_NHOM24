@@ -1,4 +1,4 @@
-﻿@model DonHangChiTietViewModel
+﻿@model QUANLYBANMAYANH_NHOM24.Models.MyViewModels
 
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
@@ -22,14 +22,14 @@
         <span class="dot">•</span>
         <a href="@Url.Action("LichSuDonHang", "KhachHang")" class="order-history">Lịch sử đơn hàng</a>
         <span class="dot">•</span>
-        <a class="order-details">Đơn hàng @Model.MaDonHang</a>
+        <a class="order-details">Đơn hàng @Model.DonHangChiTiet.MaDonHang</a>
     </div>
 
     <div class="profile-container mt-5">
         <div class="sidebar col-md-6">
             <div class="avtar-name-user">
                 <img src="~/images/user_avatar.png" />
-                <h2>Nguyễn Văn A</h2>
+                <h2>@Model.NguoiDung.TenNguoiDung</h2>
             </div>
             <ul>
                 <li class="acc-menu-items">
@@ -59,10 +59,10 @@
             </ul>
         </div>
         <div class="order-details-list col-md-6">
-            <h2>Đơn hàng @Model.MaDonHang</h2>
+            <h2>Đơn hàng @Model.DonHangChiTiet.MaDonHang</h2>
             <p class="date-order mb-20">
                 Ngày đặt hàng: 
-                <span class="date fw-7 c-third">@(DateTime.TryParse(Model.NgayMua, out DateTime ngayMua) ? ngayMua.ToString("dd/MM/yyyy") : "Không xác định")</span>
+                <span class="date fw-7 c-third">@(DateTime.TryParse(Model.DonHangChiTiet.NgayMua, out DateTime ngayMua) ? ngayMua.ToString("dd/MM/yyyy") : "Không xác định")</span>
             </p>
             <div class="order-list-items">
                 <table class="table-order">
@@ -75,7 +75,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var chiTiet in Model.ChiTietDonHangs)
+                        @foreach (var chiTiet in Model.DonHangChiTiet.ChiTietDonHangs)
                         {
                             <tr>
                                 <td>
@@ -105,13 +105,13 @@
                     </p>
                     <p>
                         Phương thức thanh toán:
-                        <span>@Model.PhuongThucThanhToan</span>
+                        <span>@Model.DonHangChiTiet.PhuongThucThanhToan</span>
                     </p>
                 </div>
                 <div class="order-details-total">
                     <p>
                         Tổng tiền:
-                        <span>@Model.TongTien.ToString("C")</span>
+                        <span>@Model.DonHangChiTiet.TongTien.ToString("C0")</span>
                     </p>
                 </div>
             </div>

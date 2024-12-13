@@ -14,7 +14,7 @@
                 <a href="#" id="userDropdown">
                     <img src="${data.avatarUrl}" alt="Avatar" class="rounded-circle" width="40" height="40" data-logged-in="true">
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                <ul class="dropdown-menu" aria-labelledby="userDropdown" padding="20">
                     <li><a class="dropdown-item" href="/KhachHang/CapNhatThongTin">Tài khoản của tôi</a></li>
                     <li><a class="dropdown-item" href="/KhachHang/LichSuDonHang">Đơn hàng</a></li>
                     <li><a class="dropdown-item text-danger" href="/Login/DangXuat">Đăng xuất</a></li>
